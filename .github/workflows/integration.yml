@@ -33,4 +33,19 @@ jobs:
       uses: actions/setup-go@v3
       with:
         go-version-file: 'go.mod'
-        check-late
+        check-latest: true
+        cache: true
+
+    - name: Set up gotestfmt
+      run: go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@latest
+
+    - name: Test
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        set -euo pipefail
+        env INTEGRATION_SKIP_ES=true go test -json -v -tags=integration ./... 2>&1 | tee /tmp/gotest_integration.log | gotestfmt
+
+    - name: Upload test log
+      uses: actions/upload-artifact@v2
+    
