@@ -16,4 +16,21 @@ jobs:
 
     services:
       weaviate:
-        image: semitec
+        image: semitechnologies/weaviate:1.19.8
+        ports:
+          - 8080:8080
+        env:
+          QUERY_DEFAULTS_LIMIT: 25
+          AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+          PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+          DEFAULT_VECTORIZER_MODULE: 'none'
+          CLUSTER_HOSTNAME: 'node1'
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version-file: 'go.mod'
+        check-late
