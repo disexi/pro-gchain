@@ -16,4 +16,21 @@ type Action struct {
 	toolName      string // tool name to run by executor
 	toolInputJson string // input for the tool in json
 	toolOutput    string // output from tool
-	message       string // message 
+	message       string // message from agent llm prediction
+	finalAction   bool   // is it final action or not
+}
+
+// BaseAgent
+type BaseAgent interface {
+	// Plan is determine what action to text next
+	Plan(ctx context.Context, userPrompt string, actionTaken []Action) (plan Action, err error)
+}
+
+// BaseExecutor
+type BaseExecutor interface {
+	Run(ctx context.Context, input map[string]string) (output map[string]string, err error)
+	RegisterTool(tool *tools.BaseTool)
+}
+
+// Executor
+type Exe
