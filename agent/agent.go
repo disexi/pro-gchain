@@ -52,4 +52,19 @@ func NewExecutor(agent BaseAgent, maxIteration int) *Executor {
 }
 
 // RegisterTool put tool to executor
-func (E *Executor) RegisterTool(tool tools.Bas
+func (E *Executor) RegisterTool(tool tools.BaseTool) {
+	E.tools[tool.GetFunctionDefinition().Name] = tool
+}
+
+// Run the executor loop until it reach final answer/action
+func (E *Executor) Run(ctx context.Context, input map[string]string) (output map[string]string, err error) {
+	actionTaken := []Action{}
+	iterationNumber := 0
+	for {
+		// get plan from agent
+		plan, err := E.agent.Plan(ctx, input["input"], actionTaken)
+		if err != nil {
+			return nil, err
+		}
+
+		// if plan is the final 
