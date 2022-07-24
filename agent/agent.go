@@ -33,4 +33,23 @@ type BaseExecutor interface {
 }
 
 // Executor
-type Exe
+type Executor struct {
+	agent        BaseAgent
+	tools        map[string]tools.BaseTool
+	maxIteration int
+}
+
+// NewExecutor create new executor
+func NewExecutor(agent BaseAgent, maxIteration int) *Executor {
+	if maxIteration == 0 {
+		maxIteration = 10
+	}
+	return &Executor{
+		agent:        agent,
+		tools:        map[string]tools.BaseTool{},
+		maxIteration: maxIteration,
+	}
+}
+
+// RegisterTool put tool to executor
+func (E *Executor) RegisterTool(tool tools.Bas
