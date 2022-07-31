@@ -13,4 +13,7 @@ type ConversationalAgent struct {
 	memory memory.Memory
 }
 
-func (ChatModel *ConversationalAgent) Plan(
+func (ChatModel *ConversationalAgent) Plan(ctx context.Context, userPrompt string, actionTaken []agent.Action) (plan agent.Action, err error) {
+
+	return
+}
