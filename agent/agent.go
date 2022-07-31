@@ -67,4 +67,23 @@ func (E *Executor) Run(ctx context.Context, input map[string]string) (output map
 			return nil, err
 		}
 
-		// if plan is the final 
+		// if plan is the final result, return it
+		if plan.finalAction {
+			output = map[string]string{"output": plan.message}
+			break
+		}
+
+		// run plan / execute tool
+		if plan.toolName != "" {
+			toolsOutput, err := E.tools[plan.toolName].SimpleRun(ctx, plan.toolInputJson)
+			if err != nil {
+				return nil, err
+			}
+			plan.toolOutput = toolsOutput
+		}
+
+		// append action taken
+		actionTaken = append(actionTaken, plan)
+
+		if iterationNumber == E.maxIteration {
+			return 
