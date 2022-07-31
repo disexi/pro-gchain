@@ -86,4 +86,9 @@ func (E *Executor) Run(ctx context.Context, input map[string]string) (output map
 		actionTaken = append(actionTaken, plan)
 
 		if iterationNumber == E.maxIteration {
-			return 
+			return map[string]string{"output": plan.toolOutput}, ErrMaxIteration
+		}
+		iterationNumber++
+	}
+	return
+}
