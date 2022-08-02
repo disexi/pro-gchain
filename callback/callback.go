@@ -35,4 +35,19 @@ func NewManager() *Manager {
 	}
 }
 
-func (m *Manager) Regis
+func (m *Manager) RegisterCallback(event Event, callback Callback) {
+	identifier := CallbackIdentifier{
+		EventName:   event,
+		FuncPointer: reflect.ValueOf(callback).Pointer(),
+	}
+
+	// Check if the identifier already exists in the map
+	for _, id := range m.callbackIdentifiers {
+		if id == identifier {
+			// The callback already exists, so we skip adding it again
+			return
+		}
+	}
+
+	// Add the identifier and callback to the maps
+	m.callbackIdentifiers = append(m
