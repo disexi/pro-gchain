@@ -50,4 +50,21 @@ func (m *Manager) RegisterCallback(event Event, callback Callback) {
 	}
 
 	// Add the identifier and callback to the maps
-	m.callbackIdentifiers = append(m
+	m.callbackIdentifiers = append(m.callbackIdentifiers, identifier)
+	m.callbacks[event] = append(m.callbacks[event], callback)
+}
+
+func (m *Manager) TriggerEvent(ctx context.Context, event Event, data CallbackData) {
+	if callbacks, ok := m.callbacks[event]; ok {
+		for _, callback := range callbacks {
+			callback(ctx, data)
+		}
+	}
+}
+
+// inspect return all the registered callback so we can test
+func (m *Manager) inspect() map[Event][]Callback {
+	return m.callbacks
+}
+
+func VerboseCallback(ct
