@@ -67,4 +67,6 @@ func (m *Manager) inspect() map[Event][]Callback {
 	return m.callbacks
 }
 
-func VerboseCallback(ct
+func VerboseCallback(ctx context.Context, data CallbackData) {
+	pp.Println(data)
+}
