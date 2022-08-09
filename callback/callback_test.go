@@ -44,4 +44,20 @@ func TestManager_TriggerEvent(t *testing.T) {
 	manager := NewManager()
 
 	// Variables to track callback invocations
-	var callb
+	var callback1Invoked, callback2Invoked bool
+
+	// Register some callbacks
+	manager.RegisterCallback("event1", func(ctx context.Context, data CallbackData) {
+		callback1Invoked = true
+	})
+
+	manager.RegisterCallback("event2", func(ctx context.Context, data CallbackData) {
+		callback2Invoked = true
+	})
+
+	// Prepare test data
+	ctx := context.Background()
+	data := CallbackData{
+		RunID:        "123",
+		EventName:    "event1",
+		FunctionName: "test
