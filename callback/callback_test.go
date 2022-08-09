@@ -60,4 +60,20 @@ func TestManager_TriggerEvent(t *testing.T) {
 	data := CallbackData{
 		RunID:        "123",
 		EventName:    "event1",
-		FunctionName: "test
+		FunctionName: "test",
+		Input:        map[string]string{"input1": "value1"},
+		Output:       map[string]string{"output1": "value1"},
+		Data:         "some data",
+	}
+
+	// Reset invocation tracking variables
+	callback1Invoked = false
+	callback2Invoked = false
+
+	// Trigger the event
+	manager.TriggerEvent(ctx, "event1", data)
+	manager.TriggerEvent(ctx, "event2", data)
+
+	// Assert callback invocations
+	if !callback1Invoked {
+		t.Errorf("Callback 1 was not invoked"
