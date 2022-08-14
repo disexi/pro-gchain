@@ -96,4 +96,6 @@ func callback2(ctx context.Context, data CallbackData) {
 }
 
 func callback3(ctx context.Context, data CallbackData) {
-	fmt.P
+	fmt.Println("Callback 3 called")
+	// Add assertions or verification specific to callback3
+}
