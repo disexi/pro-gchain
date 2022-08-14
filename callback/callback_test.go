@@ -76,4 +76,24 @@ func TestManager_TriggerEvent(t *testing.T) {
 
 	// Assert callback invocations
 	if !callback1Invoked {
-		t.Errorf("Callback 1 was not invoked"
+		t.Errorf("Callback 1 was not invoked")
+	}
+
+	if !callback2Invoked {
+		t.Errorf("Callback 2 was not invoked")
+	}
+}
+
+// Example callback functions
+func callback1(ctx context.Context, data CallbackData) {
+	fmt.Println("Callback 1 called")
+	// Add assertions or verification specific to callback1
+}
+
+func callback2(ctx context.Context, data CallbackData) {
+	fmt.Println("Callback 2 called")
+	// Add assertions or verification specific to callback2
+}
+
+func callback3(ctx context.Context, data CallbackData) {
+	fmt.P
