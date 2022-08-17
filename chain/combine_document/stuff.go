@@ -31,4 +31,22 @@ func NewStuffCombineDocument(prompt *prompt.PromptTemplate,
 }
 
 // Combine concatenate the given document and then feed to LLM
-func (S *StuffCombineDocument) Combine(ctx context.Context, docs []string, options ...func(*model.Option)) (outp
+func (S *StuffCombineDocument) Combine(ctx context.Context, docs []string, options ...func(*model.Option)) (output string, err error) {
+	//concat all docs into 1 string
+	var doc string
+	for _, item := range docs {
+		doc += item + "\n"
+	}
+	templateData := map[string]string{S.promptTemplateKey: doc}
+
+	prompt, err := S.prompt.FormatPrompt(templateData)
+	if err != nil {
+		return
+	}
+	output, err = S.llmChain.SimpleRun(ctx, prompt)
+
+	return
+}
+
+// Run expect input["input"] as input, and put the result to output["output"]
+func (S *StuffCombineDocument) Run(
