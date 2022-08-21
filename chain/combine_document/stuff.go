@@ -49,4 +49,15 @@ func (S *StuffCombineDocument) Combine(ctx context.Context, docs []string, optio
 }
 
 // Run expect input["input"] as input, and put the result to output["output"]
-func (S *StuffCombineDocument) Run(
+func (S *StuffCombineDocument) Run(ctx context.Context, input map[string]string, options ...func(*model.Option)) (output map[string]string, err error) {
+	if _, ok := input["input"]; !ok {
+		return output, errors.New("input[\"input\"] is not specified")
+	}
+	output = make(map[string]string)
+	output["output"], err = S.Combine(ctx, []string{input["input"]})
+
+	return
+}
+
+// SimpleRun will run the input string agains llmchain
+func (S *StuffCombineDocument) SimpleRun(ctx context.C
