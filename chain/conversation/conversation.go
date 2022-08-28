@@ -25,4 +25,19 @@ func NewConversationChain(chatModel model.ChatModel,
 	verbose bool) (chain *ConversationChain) {
 
 	if verbose {
-		callbackManager.Reg
+		callbackManager.RegisterCallback(basechain.CallbackChainEnd, callback.VerboseCallback)
+	}
+	memory = append(memory, model.ChatMessage{Role: model.ChatMessageRoleSystem, Content: firstSystemPrompt})
+	return &ConversationChain{
+		chatModel:       chatModel,
+		callbackManager: callbackManager,
+		memory:          memory,
+	}
+}
+
+// AppendMemory to add conversation to the memory
+func (C *ConversationChain) AppendToMemory(message model.ChatMessage) {
+	C.memory = append(C.memory, message)
+}
+
+//
