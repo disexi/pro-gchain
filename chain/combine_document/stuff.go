@@ -60,4 +60,7 @@ func (S *StuffCombineDocument) Run(ctx context.Context, input map[string]string,
 }
 
 // SimpleRun will run the input string agains llmchain
-func (S *StuffCombineDocument) SimpleRun(ctx context.C
+func (S *StuffCombineDocument) SimpleRun(ctx context.Context, input string, options ...func(*model.Option)) (output string, err error) {
+	output, err = S.Combine(ctx, []string{input})
+	return
+}
