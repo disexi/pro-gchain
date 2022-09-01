@@ -40,4 +40,12 @@ func (C *ConversationChain) AppendToMemory(message model.ChatMessage) {
 	C.memory = append(C.memory, message)
 }
 
-//
+// Run expect chat["input"] as input, and put the result to output["output"]
+func (C *ConversationChain) Run(ctx context.Context, chat map[string]string, options ...func(*model.Option)) (output map[string]string, err error) {
+	if _, ok := chat["input"]; !ok {
+		return output, errors.New("input[\"input\"] is not specified")
+	}
+	output = make(map[string]string)
+
+	//trigger callback
+	C.callbackManager.TriggerEvent(ctx, basechain.Ca
