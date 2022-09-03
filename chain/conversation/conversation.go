@@ -48,4 +48,17 @@ func (C *ConversationChain) Run(ctx context.Context, chat map[string]string, opt
 	output = make(map[string]string)
 
 	//trigger callback
-	C.callbackManager.TriggerEvent(ctx, basechain.Ca
+	C.callbackManager.TriggerEvent(ctx, basechain.CallbackChainStart, callback.CallbackData{
+		EventName:    basechain.CallbackChainStart,
+		FunctionName: "ConversationChain.Run",
+		Input:        chat,
+		Output:       output,
+	})
+
+	C.AppendToMemory(model.ChatMessage{Role: model.ChatMessageRoleUser, Content: chat["input"]})
+	message, err := C.chatModel.Chat(ctx, C.memory, options...)
+
+	// add response message to memory
+	C.AppendToMemory(message)
+
+	output["output"] = message.Co
