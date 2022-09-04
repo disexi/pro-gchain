@@ -61,4 +61,19 @@ func (C *ConversationChain) Run(ctx context.Context, chat map[string]string, opt
 	// add response message to memory
 	C.AppendToMemory(message)
 
-	output["output"] = message.Co
+	output["output"] = message.Content
+
+	//trigger callback
+	C.callbackManager.TriggerEvent(ctx, basechain.CallbackChainEnd, callback.CallbackData{
+		EventName:    basechain.CallbackChainEnd,
+		FunctionName: "ConversationChain.Run",
+		Input:        chat,
+		Output:       output,
+	})
+
+	return
+}
+
+// SimpleRun will run the prompt string agains llmchain
+func (C *ConversationChain) SimpleRun(ctx context.Context, chat string, options ...func(*model.Option)) (output string, err error) {
+	response, err :=
