@@ -76,4 +76,8 @@ func (C *ConversationChain) Run(ctx context.Context, chat map[string]string, opt
 
 // SimpleRun will run the prompt string agains llmchain
 func (C *ConversationChain) SimpleRun(ctx context.Context, chat string, options ...func(*model.Option)) (output string, err error) {
-	response, err :=
+	response, err := C.Run(ctx, map[string]string{"input": chat}, options...)
+	output = response["output"]
+
+	return
+}
