@@ -17,4 +17,24 @@ use this if you can answer directly without KB lookup
 Answer in this following json schema:
 
 {
-"conversation_context":"longer additional context to understand user 
+"conversation_context":"longer additional context to understand user question",
+"intent":"user intention",
+"answer":"the answer here",
+"lookup":false
+}
+
+**Option 2:**
+Use this if you want to lookup
+Answer in this following json schema:
+
+{
+"kb":"knowledge base name",
+"question":"user question",
+"query":"the question keyword will be put here",
+"conversation_context":"longer additional context to understand user question",
+"intent":"user intention",
+"lookup":true
+}
+`
+
+var answeringInstruction = `with this context, answer user question in kind and concis
