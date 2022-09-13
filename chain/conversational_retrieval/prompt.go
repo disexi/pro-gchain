@@ -37,4 +37,8 @@ Answer in this following json schema:
 }
 `
 
-var answeringInstruction = `with this context, answer user question in kind and concis
+var answeringInstruction = `with this context, answer user question in kind and concise manner
+{{.context}}
+document: {{.doc}}
+Answer concisely :
+`
