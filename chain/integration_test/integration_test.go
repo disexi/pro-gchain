@@ -30,4 +30,19 @@ func TestMain(m *testing.M) {
 	fmt.Println("Running integration tests...")
 	// Perform any setup or initialization here
 
-	var authToken = os.Geten
+	var authToken = os.Getenv("OPENAI_API_KEY")
+	llmModel = _openai.NewOpenAIModel(authToken, "text-davinci-003", callback.NewManager())
+
+	chatModel = _openai.NewOpenAIChatModel(authToken, _openai.GPT3Dot5Turbo0301, callback.NewManager())
+
+	exitCode := m.Run()
+
+	// Perform any cleanup or teardown here
+
+	// Exit with the appropriate exit code
+	// (0 for success, non-zero for failure)
+	os.Exit(exitCode)
+}
+
+func TestLlmChain(t *testing.T) {
+	chain, err := llm_chain.NewLLMChain(llmModel, callback.N
