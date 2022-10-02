@@ -62,4 +62,9 @@ func TestLlmChain(t *testing.T) {
 }
 
 func TestStuffSummarizationChain(t *testing.T) {
-	llmchain, err := llm_chain.NewLLMChain(
+	llmchain, err := llm_chain.NewLLMChain(llmModel, callback.NewManager(), nil, false)
+	assert.NoError(t, err, "NewLLMChain")
+
+	chain, err := summarization.NewStuffSummarizationChain(llmchain, "", "text")
+	assert.NoError(t, err, "error NewStuffSummarizationChain")
+	output, err := chain.SimpleRun(context.Background(), `Modular audio and video hardware for retro machines like the Commodore 64. Designed to use 74 series TTL through hole ICs available back in the 1980s, something yo
