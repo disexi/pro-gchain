@@ -45,4 +45,11 @@ func TestMain(m *testing.M) {
 }
 
 func TestLlmChain(t *testing.T) {
-	chain, err := llm_chain.NewLLMChain(llmModel, callback.N
+	chain, err := llm_chain.NewLLMChain(llmModel, callback.NewManager(), nil, false)
+	assert.NoError(t, err, "NewLLMChain")
+	outputMap, err := chain.Run(context.Background(), map[string]string{"input": "Indonesia Capital is Jakarta\nJakarta is the capital of "})
+	assert.NoError(t, err, "error Run")
+	assert.Contains(t, outputMap["output"], "Indonesia", "unexpected result")
+
+	customPrompt, err := prompt.NewPromptTemplate("customPrompt", "{{.text}}")
+	customPromptChain, err := llm_chain.NewLLMChain(llmModel, callback.NewManager(
