@@ -52,4 +52,14 @@ func TestLlmChain(t *testing.T) {
 	assert.Contains(t, outputMap["output"], "Indonesia", "unexpected result")
 
 	customPrompt, err := prompt.NewPromptTemplate("customPrompt", "{{.text}}")
-	customPromptChain, err := llm_chain.NewLLMChain(llmModel, callback.NewManager(
+	customPromptChain, err := llm_chain.NewLLMChain(llmModel, callback.NewManager(), customPrompt, false)
+	assert.NoError(t, err, "NewLLMChain")
+
+	customOutputMap, err := customPromptChain.Run(context.Background(), map[string]string{"text": "Indonesia Capital is Jakarta\nJakarta is the capital of "})
+	assert.NoError(t, err, "error Run")
+	assert.Contains(t, customOutputMap["output"], "Indonesia", "unexpected result")
+
+}
+
+func TestStuffSummarizationChain(t *testing.T) {
+	llmchain, err := llm_chain.NewLLMChain(
