@@ -67,4 +67,6 @@ func TestStuffSummarizationChain(t *testing.T) {
 
 	chain, err := summarization.NewStuffSummarizationChain(llmchain, "", "text")
 	assert.NoError(t, err, "error NewStuffSummarizationChain")
-	output, err := chain.SimpleRun(context.Background(), `Modular audio and video hardware for retro machines like the Commodore 64. Designed to use 74 series TTL through hole ICs available back in the 1980s, something yo
+	output, err := chain.SimpleRun(context.Background(), `Modular audio and video hardware for retro machines like the Commodore 64. Designed to use 74 series TTL through hole ICs available back in the 1980s, something you can solder at home from parts or order ready assembled.
+	One of the most recent videos shows a "Shadow of the Beast" demonstration, to show parallax scrolling with precisely timed raster effects. Please do consider subscribing to the YouTube channel if you want to see more updates to this project: 
+	This project started when old retro arcade hardware was being discussed. In the back of my mind was the often fabled "Mega games" by Imagine Software whi
