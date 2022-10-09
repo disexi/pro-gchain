@@ -81,4 +81,12 @@ func TestStuffSummarizationChain(t *testing.T) {
 
 func TestMapReduceSummarizationChain(t *testing.T) {
 	llmchain, err := llm_chain.NewLLMChain(llmModel, callback.NewManager(), nil, false)
-	asse
+	assert.NoError(t, err, "NewLLMChain")
+
+	splitter, err := textsplitter.NewTikTokenSplitter("")
+	assert.NoError(t, err, "NewTikTokenSplitter")
+	chain, err := summarization.NewMapReduceSummarizationChain(llmchain, "", "", "text", splitter, 1000)
+	assert.NoError(t, err, "error NewMapReduceSummarizationChain")
+
+	testDoc := make(map[string]string)
+	testDoc["input"] = `Modular audio and video hardware for retro machines like the Commodore 64. Designed to use 74 series TTL
