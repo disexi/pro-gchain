@@ -89,4 +89,6 @@ func TestMapReduceSummarizationChain(t *testing.T) {
 	assert.NoError(t, err, "error NewMapReduceSummarizationChain")
 
 	testDoc := make(map[string]string)
-	testDoc["input"] = `Modular audio and video hardware for retro machines like the Commodore 64. Designed to use 74 series TTL
+	testDoc["input"] = `Modular audio and video hardware for retro machines like the Commodore 64. Designed to use 74 series TTL through hole ICs available back in the 1980s, something you can solder at home from parts or order ready assembled.
+	One of the most recent videos shows a "Shadow of the Beast" demonstration, to show parallax scrolling with precisely timed raster effects. Please do consider subscribing to the YouTube channel if you want to see more updates to this project: 
+	This project started when old retro arcade hardware was being discussed. In the b
