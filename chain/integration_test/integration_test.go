@@ -91,4 +91,5 @@ func TestMapReduceSummarizationChain(t *testing.T) {
 	testDoc := make(map[string]string)
 	testDoc["input"] = `Modular audio and video hardware for retro machines like the Commodore 64. Designed to use 74 series TTL through hole ICs available back in the 1980s, something you can solder at home from parts or order ready assembled.
 	One of the most recent videos shows a "Shadow of the Beast" demonstration, to show parallax scrolling with precisely timed raster effects. Please do consider subscribing to the YouTube channel if you want to see more updates to this project: 
-	This project started when old retro arcade hardware was being discussed. In the b
+	This project started when old retro arcade hardware was being discussed. In the back of my mind was the often fabled "Mega games" by Imagine Software which were planned to use extra hardware on the Spectrum and Commodore 64 to augment the machine's capabilities. Since this hardware uses TTL logic available back from the same time period I was wondering exactly how much extra graphical grunt could have been engineered and interfaced with these old 8-bit computers.
+	Truth be told, the Imagine hardware was pretty much just extra RAM https://www.gamesthatweren
