@@ -98,3 +98,15 @@ func TestMapReduceSummarizationChain(t *testing.T) {
 
 	output, err := chain.Run(context.Background(), testDoc, model.WithMaxToken(200))
 	assert.NoError(t, err, "error Run(context.Background(), testDoc, model.MaxToken(200))")
+
+	assert.NotEmpty(t, output)
+
+}
+
+func TestStuffSummarizationChainChat(t *testing.T) {
+	llmchain, err := llm_chain.NewLLMChain(llmModel, callback.NewManager(), nil, false)
+	assert.NoError(t, err, "NewLLMChain")
+
+	chain, err := summarization.NewStuffSummarizationChain(llmchain, "", "text")
+	assert.NoError(t, err, "error NewStuffSummarizationChain")
+	output, err := chain.SimpleRun(context.Background(), `Modular audio and video hardware for retro machines like the Commodore 64. 
