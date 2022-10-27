@@ -120,4 +120,16 @@ func TestStuffSummarizationChainChat(t *testing.T) {
 	assert.NotEmpty(t, output)
 
 	IsMeaningfull := eval.NewCorrectnessEval(llmModel, "Is the input meaningful?")
-	evalOutput
+	evalOutput, err := IsMeaningfull.Evaluate(output)
+	if !evalOutput {
+		t.Error(err)
+	}
+
+}
+
+func TestConversationChainChat(t *testing.T) {
+	memory := []model.ChatMessage{}
+	convoChain := conversation.NewConversationChain(chatModel, memory, callback.NewManager(), "You're helpful chatbot that answer very concisely", false)
+
+	convoChain.AppendToMemory(model.ChatMessage{Role: model.ChatMessageRoleAssistant, Content: "Hi, My name is GioAI"})
+	output, err := convoChain.Run(context.Backgro
