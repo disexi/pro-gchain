@@ -132,4 +132,14 @@ func TestConversationChainChat(t *testing.T) {
 	convoChain := conversation.NewConversationChain(chatModel, memory, callback.NewManager(), "You're helpful chatbot that answer very concisely", false)
 
 	convoChain.AppendToMemory(model.ChatMessage{Role: model.ChatMessageRoleAssistant, Content: "Hi, My name is GioAI"})
-	output, err := convoChain.Run(context.Backgro
+	output, err := convoChain.Run(context.Background(), map[string]string{"input": "what's your name?"}, model.WithTemperature(0), model.WithMaxToken(100))
+	assert.NoError(t, err)
+
+	outputString, err := convoChain.SimpleRun(context.Background(), "so your name is gioAI", model.WithTemperature(0), model.WithMaxToken(100))
+	assert.NotEmpty(t, outputString)
+	assert.NotNil(t, output["output"])
+}
+
+func TestConversationalRetrievalChainChat(t *testing.T) {
+	memory := []model.ChatMessage{}
+	splitter, err := text
