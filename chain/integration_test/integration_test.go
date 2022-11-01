@@ -142,4 +142,9 @@ func TestConversationChainChat(t *testing.T) {
 
 func TestConversationalRetrievalChainChat(t *testing.T) {
 	memory := []model.ChatMessage{}
-	splitter, err := text
+	splitter, err := textsplitter.NewTikTokenSplitter(_openai.GPT3Dot5Turbo0301)
+	assert.NoError(t, err)
+	convoChain := conversational_retrieval.NewConversationalRetrievalChain(chatModel, memory, &wikipedia.Wikipedia{}, "", splitter, callback.NewManager(), "You're helpful chatbot that answer very concisely", 1000, false)
+
+	convoChain.AppendToMemory(model.ChatMessage{Role: model.ChatMessageRoleAssistant, Content: "Hi, My name is GioAI"})
+	convoChain.AppendToMemory(model.Cha
