@@ -151,4 +151,6 @@ func TestConversationalRetrievalChainChat(t *testing.T) {
 	convoChain.AppendToMemory(model.ChatMessage{Role: model.ChatMessageRoleAssistant, Content: "The first president of indonesia was Soekarno"})
 
 	response, err := convoChain.Run(context.Background(), map[string]string{"input": "tell me little bit more about soekarno?"}, model.WithTemperature(0.3), model.WithMaxToken(1000))
-	assert.NotNil(t, response[
+	assert.NotNil(t, response["input"])
+	assert.NoError(t, err)
+}
