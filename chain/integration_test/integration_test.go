@@ -147,4 +147,8 @@ func TestConversationalRetrievalChainChat(t *testing.T) {
 	convoChain := conversational_retrieval.NewConversationalRetrievalChain(chatModel, memory, &wikipedia.Wikipedia{}, "", splitter, callback.NewManager(), "You're helpful chatbot that answer very concisely", 1000, false)
 
 	convoChain.AppendToMemory(model.ChatMessage{Role: model.ChatMessageRoleAssistant, Content: "Hi, My name is GioAI"})
-	convoChain.AppendToMemory(model.Cha
+	convoChain.AppendToMemory(model.ChatMessage{Role: model.ChatMessageRoleUser, Content: "Who is the first president of Indonesia?"})
+	convoChain.AppendToMemory(model.ChatMessage{Role: model.ChatMessageRoleAssistant, Content: "The first president of indonesia was Soekarno"})
+
+	response, err := convoChain.Run(context.Background(), map[string]string{"input": "tell me little bit more about soekarno?"}, model.WithTemperature(0.3), model.WithMaxToken(1000))
+	assert.NotNil(t, response[
