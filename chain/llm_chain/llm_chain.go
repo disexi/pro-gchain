@@ -26,4 +26,21 @@ func NewLLMChain(llmModel model.LLMModel, callbackManager *callback.Manager, pro
 	if promptTemplate == nil {
 		promptTemplate, err = prompt.NewPromptTemplate("default", defaultTemplate)
 		if err != nil {
-			re
+			return
+		}
+	}
+	if verbose {
+		callbackManager.RegisterCallback(chain.CallbackChainEnd, callback.VerboseCallback)
+	}
+	llmchain = &LLMChain{
+		llmModel:        llmModel,
+		promptTemplate:  promptTemplate,
+		callbackManager: callbackManager,
+	}
+
+	return
+}
+
+// Run do completion
+// the default template expect prompt["input"] as input, and put the result to output["output"]
+func (L *LLMChain) Run(ctx context.Context, prompt map[string]string, options ...func(*model.Optio
