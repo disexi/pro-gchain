@@ -43,4 +43,22 @@ func NewLLMChain(llmModel model.LLMModel, callbackManager *callback.Manager, pro
 
 // Run do completion
 // the default template expect prompt["input"] as input, and put the result to output["output"]
-func (L *LLMChain) Run(ctx context.Context, prompt map[string]string, options ...func(*model.Optio
+func (L *LLMChain) Run(ctx context.Context, prompt map[string]string, options ...func(*model.Option)) (output map[string]string, err error) {
+	output = make(map[string]string)
+
+	//trigger callback chain start
+	L.callbackManager.TriggerEvent(ctx, chain.CallbackChainStart, callback.CallbackData{
+		EventName:    chain.CallbackChainStart,
+		FunctionName: "LLMChain.Run",
+		Input:        prompt,
+		Output:       output,
+	})
+
+	promptStr, err := L.promptTemplate.FormatPrompt(prompt)
+	if err != nil {
+		return
+	}
+
+	output["output"], err = L.llmModel.Call(ctx, promptStr, options...)
+
+	// tr
