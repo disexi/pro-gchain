@@ -87,4 +87,9 @@ func (L *LLMChain) SimpleRun(ctx context.Context, prompt string, options ...func
 	L.callbackManager.TriggerEvent(ctx, chain.CallbackChainEnd, callback.CallbackData{
 		EventName:    chain.CallbackChainEnd,
 		FunctionName: "LLMChain.SimpleRun",
-		In
+		Input:        map[string]string{"input": prompt},
+		Output:       map[string]string{"output": output},
+	})
+
+	return
+}
