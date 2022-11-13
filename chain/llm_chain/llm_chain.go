@@ -61,4 +61,18 @@ func (L *LLMChain) Run(ctx context.Context, prompt map[string]string, options ..
 
 	output["output"], err = L.llmModel.Call(ctx, promptStr, options...)
 
-	// tr
+	// trigger callback chain end
+	L.callbackManager.TriggerEvent(ctx, chain.CallbackChainEnd, callback.CallbackData{
+		EventName:    chain.CallbackChainEnd,
+		FunctionName: "LLMChain.Run",
+		Input:        prompt,
+		Output:       output,
+	})
+
+	return
+}
+
+// SimpleRun will run the prompt string agains llmchain
+func (L *LLMChain) SimpleRun(ctx context.Context, prompt string, options ...func(*model.Option)) (output string, err error) {
+	//trigger callback chain start
+	L.callback
