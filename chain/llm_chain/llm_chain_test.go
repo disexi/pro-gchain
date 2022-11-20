@@ -55,4 +55,21 @@ func TestLLMChain_SimpleRun(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.
+		t.Run(tt.name, func(t *testing.T) {
+			L := &LLMChain{
+				llmModel:        tt.fields.llmModel,
+				callbackManager: tt.fields.callbackManager,
+			}
+			gotOutput, err := L.SimpleRun(tt.args.ctx, tt.args.input, tt.args.options...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("LLMChain.SimpleRun() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if gotOutput != tt.wantOutput {
+				t.Errorf("LLMChain.SimpleRun() = %v, want %v", gotOutput, tt.wantOutput)
+			}
+		})
+	}
+}
+
+func
