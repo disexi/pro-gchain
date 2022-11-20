@@ -72,4 +72,25 @@ func TestLLMChain_SimpleRun(t *testing.T) {
 	}
 }
 
-func
+func TestLLMChain_Run(t *testing.T) {
+	type fields struct {
+		llmModel        model.LLMModel
+		callbackManager *callback.Manager
+	}
+	type args struct {
+		ctx     context.Context
+		input   map[string]string
+		options []func(*model.Option)
+	}
+	tests := []struct {
+		name       string
+		fields     fields
+		args       args
+		wantOutput map[string]string
+		wantErr    bool
+	}{
+		{
+			name: "empty",
+			fields: fields{
+				llmModel: &model.LLMModelMock{
+					CallFunc: fu
