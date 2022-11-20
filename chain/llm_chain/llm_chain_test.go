@@ -35,4 +35,24 @@ func TestLLMChain_SimpleRun(t *testing.T) {
 						return "", nil
 					},
 				},
-				callbackManager: c
+				callbackManager: callback.NewManager(),
+			},
+		},
+		{
+			name: "echo prompt",
+			fields: fields{
+				llmModel: &model.LLMModelMock{
+					CallFunc: func(ctx context.Context, prompt string, options ...func(*model.Option)) (string, error) {
+						return prompt, nil
+					},
+				},
+				callbackManager: callback.NewManager(),
+			},
+			args: args{
+				input: "echo prompt",
+			},
+			wantOutput: "echo prompt",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.
