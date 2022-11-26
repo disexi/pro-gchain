@@ -93,4 +93,17 @@ func TestLLMChain_Run(t *testing.T) {
 			name: "empty",
 			fields: fields{
 				llmModel: &model.LLMModelMock{
-					CallFunc: fu
+					CallFunc: func(ctx context.Context, prompt string, options ...func(*model.Option)) (string, error) {
+						return "", nil
+					},
+				},
+				callbackManager: callback.NewManager(),
+			},
+			wantOutput: map[string]string{"output": ""},
+		},
+		{
+			name: "echo input",
+			fields: fields{
+				llmModel: &model.LLMModelMock{
+					CallFunc: func(ctx context.Context, prompt string, options ...func(*model.Option)) (string, error) {
+						return prompt, n
