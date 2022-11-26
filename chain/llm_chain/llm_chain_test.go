@@ -106,4 +106,21 @@ func TestLLMChain_Run(t *testing.T) {
 			fields: fields{
 				llmModel: &model.LLMModelMock{
 					CallFunc: func(ctx context.Context, prompt string, options ...func(*model.Option)) (string, error) {
-						return prompt, n
+						return prompt, nil
+					},
+				},
+				callbackManager: callback.NewManager(),
+			},
+			args: args{
+				input: map[string]string{"input": "echo input"},
+			},
+			wantOutput: map[string]string{"output": "echo input"},
+		},
+	}
+	customPrompt, _ := prompt.NewPromptTemplate("customPrompt", "{{.input}}")
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			L := &LLMChain{
+				llmModel:        tt.fields.llmModel,
+				callbackManager: tt.fields.callbackManager,
+				
