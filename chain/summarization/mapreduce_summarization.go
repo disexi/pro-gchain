@@ -14,4 +14,18 @@ import (
 
 const (
 	promptSummarizeMapReduce = `Write a concise summary of the following:
-"{{.text}
+"{{.text}}""
+CONCISE SUMMARY:
+	`
+)
+
+type MapReduceSummarizationChain struct {
+	mapReduceCombineDocument *combine_document.MapReduceCombineDocument
+}
+
+var _ chain.BaseChain = &MapReduceSummarizationChain{}
+
+// NewMapReduceSummarizationChain create new map reduce summarization chain instance
+// put empty "" string to use default prompt
+// put 0 to use default maxToken
+func NewMapReduceSummarizationChain(llmChain *llm_chain.LLMChain, mapPromptString string, reducePromptStrin
