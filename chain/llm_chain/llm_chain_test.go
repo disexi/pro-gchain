@@ -123,4 +123,16 @@ func TestLLMChain_Run(t *testing.T) {
 			L := &LLMChain{
 				llmModel:        tt.fields.llmModel,
 				callbackManager: tt.fields.callbackManager,
-				
+				promptTemplate:  customPrompt,
+			}
+			gotOutput, err := L.Run(tt.args.ctx, tt.args.input, tt.args.options...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("LLMChain.Run() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(gotOutput, tt.wantOutput) {
+				t.Errorf("LLMChain.Run() = %v, want %v", gotOutput, tt.wantOutput)
+			}
+		})
+	}
+}
