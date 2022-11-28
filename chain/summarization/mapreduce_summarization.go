@@ -28,4 +28,19 @@ var _ chain.BaseChain = &MapReduceSummarizationChain{}
 // NewMapReduceSummarizationChain create new map reduce summarization chain instance
 // put empty "" string to use default prompt
 // put 0 to use default maxToken
-func NewMapReduceSummarizationChain(llmChain *llm_chain.LLMChain, mapPromptString string, reducePromptStrin
+func NewMapReduceSummarizationChain(llmChain *llm_chain.LLMChain, mapPromptString string, reducePromptString string,
+	promptTemplateKey string,
+	splitter textsplitter.TextSplitter, maxToken int) (m *MapReduceSummarizationChain, err error) {
+
+	var promptTemplateMap, promptTemplateReduce *prompt.PromptTemplate
+
+	if mapPromptString == "" {
+		promptTemplateMap, err = prompt.NewPromptTemplate("map", promptSummarizeMapReduce)
+		if err != nil {
+			return
+		}
+		promptTemplateKey = "text"
+	}
+
+	if reducePromptString == "" {
+		promptTemplateReduce, err = prom
