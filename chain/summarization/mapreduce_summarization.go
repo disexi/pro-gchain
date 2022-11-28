@@ -43,4 +43,23 @@ func NewMapReduceSummarizationChain(llmChain *llm_chain.LLMChain, mapPromptStrin
 	}
 
 	if reducePromptString == "" {
-		promptTemplateReduce, err = prom
+		promptTemplateReduce, err = prompt.NewPromptTemplate("map", promptSummarizeMapReduce)
+		if err != nil {
+			return
+		}
+	}
+
+	if maxToken == 0 {
+		maxToken = 1000
+	}
+
+	mapReduceCombineDocument := combine_document.NewMapReduceCombineDocument(promptTemplateMap,
+		promptTemplateReduce, promptTemplateKey, llmChain, splitter, maxToken)
+	m = &MapReduceSummarizationChain{
+		mapReduceCombineDocument: mapReduceCombineDocument,
+	}
+
+	return
+}
+
+// Run expect input["input"] as input,
