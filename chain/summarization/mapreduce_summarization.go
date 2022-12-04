@@ -62,4 +62,13 @@ func NewMapReduceSummarizationChain(llmChain *llm_chain.LLMChain, mapPromptStrin
 	return
 }
 
-// Run expect input["input"] as input,
+// Run expect input["input"] as input, and put the result to output["output"]
+func (M *MapReduceSummarizationChain) Run(ctx context.Context, input map[string]string, options ...func(*model.Option)) (output map[string]string, err error) {
+	if _, ok := input["input"]; !ok {
+		return output, errors.New("input[\"input\"] is not specified")
+	}
+	output, err = M.mapReduceCombineDocument.Run(ctx, input, options...)
+	return
+}
+
+// SimpleRun will run the input prompt string againts 
