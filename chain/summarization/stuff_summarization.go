@@ -24,4 +24,19 @@ type StuffSummarizationChain struct {
 var _ chain.BaseChain = &StuffSummarizationChain{}
 
 func NewStuffSummarizationChain(llm_chain *llm_chain.LLMChain,
-	promptTemplateString string, promptTemplateKey string) (s *StuffSummarizationChain, err 
+	promptTemplateString string, promptTemplateKey string) (s *StuffSummarizationChain, err error) {
+
+	var promptTemplate *prompt.PromptTemplate
+
+	if promptTemplateString == "" {
+		promptTemplate, err = prompt.NewPromptTemplate("stuff", promptSummarizeStuff)
+		if err != nil {
+			return
+		}
+		promptTemplateKey = "text"
+	}
+
+	stuffCombineDocument := combine_document.NewStuffCombineDocument(promptTemplate, promptTemplateKey, llm_chain)
+	s = &StuffSummarizationChain{
+		stuffCombineDocument: stuffCombineDocument,
+	
