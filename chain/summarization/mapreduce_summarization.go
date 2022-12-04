@@ -71,4 +71,8 @@ func (M *MapReduceSummarizationChain) Run(ctx context.Context, input map[string]
 	return
 }
 
-// SimpleRun will run the input prompt string againts 
+// SimpleRun will run the input prompt string againts llmchain
+func (M *MapReduceSummarizationChain) SimpleRun(ctx context.Context, input string, options ...func(*model.Option)) (output string, err error) {
+	output, err = M.mapReduceCombineDocument.SimpleRun(ctx, input, options...)
+	return
+}
