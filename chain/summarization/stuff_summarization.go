@@ -55,4 +55,7 @@ func (S *StuffSummarizationChain) Run(ctx context.Context, input map[string]stri
 }
 
 // SimpleRun will run the input prompt string againts llmchain
-func
+func (S *StuffSummarizationChain) SimpleRun(ctx context.Context, input string, options ...func(*model.Option)) (output string, err error) {
+	output, err = S.stuffCombineDocument.SimpleRun(ctx, input, options...)
+	return
+}
