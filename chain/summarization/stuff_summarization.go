@@ -39,4 +39,20 @@ func NewStuffSummarizationChain(llm_chain *llm_chain.LLMChain,
 	stuffCombineDocument := combine_document.NewStuffCombineDocument(promptTemplate, promptTemplateKey, llm_chain)
 	s = &StuffSummarizationChain{
 		stuffCombineDocument: stuffCombineDocument,
-	
+	}
+
+	return
+}
+
+// Run all entries in input map will be treated as document to be combined
+// output will be output["output"]
+func (S *StuffSummarizationChain) Run(ctx context.Context, input map[string]string, options ...func(*model.Option)) (output map[string]string, err error) {
+	if _, ok := input["input"]; !ok {
+		return output, errors.New("input[\"input\"] is not specified")
+	}
+	output, err = S.stuffCombineDocument.Run(ctx, input, options...)
+	return
+}
+
+// SimpleRun will run the input prompt string againts llmchain
+func
