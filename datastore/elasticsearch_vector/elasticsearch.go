@@ -215,3 +215,91 @@ func (ES *ElasticsearchVectorStore) SearchVector(ctx context.Context, indexName 
 		ES.esClient.API.KnnSearch.WithContext(ctx),
 		ES.esClient.API.KnnSearch.WithBody(strings.NewReader(jsonVector)),
 	)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.IsError() {
+		err = fmt.Errorf("es8 got error with status : %+v and response: %+v", resp.Status(), resp)
+		return []document.Document{}, err
+	}
+	respBody := ElasticResponse{}
+	err = json.NewDecoder(resp.Body).Decode(&respBody)
+
+	docs, err = hitToDocs(respBody, opts.AdditionalFields)
+
+	return
+}
+
+func (ES *ElasticsearchVectorStore) createIndexIfNotExist(ctx context.Context, indexName string) (err error) {
+	exist, err := ES.isIndexExist(ctx, indexName)
+	if err != nil || exist {
+		return
+	}
+	resp, err := ES.esClient.Indices.Create(
+		indexName,
+		ES.esClient.Indices.Create.WithBody(strings.NewReader(default_mapping)),
+		ES.esClient.Indices.Create.WithContext(ctx),
+	)
+	if err != nil {
+		log.Println("createIndexIfNotExist Indices.Create err: ", err)
+		return
+	}
+	if resp.IsError() {
+		err = fmt.Errorf("error createIndex with response: %+v", resp)
+	}
+	return
+}
+
+func (ES *ElasticsearchVectorStore) isIndexExist(ctx context.Context, indexName string) (exist bool, err error) {
+	resp, err := ES.esClient.API.Indices.Exists(
+		[]string{indexName},
+		ES.esClient.API.Indices.Exists.WithContext(ctx),
+	)
+	if err != nil {
+		return false, err
+	}
+	if resp.StatusCode == 400 || resp.StatusCode == 404 {
+		return false, nil
+	}
+	exist = true
+	return
+}
+
+// merge documents and vector into elasticDocument
+func dataToESDoc(documents []document.Document, vector [][]float32) (output []elasticDocument) {
+	output = make([]elasticDocument, len(documents))
+
+	for idx, doc := range documents {
+		output[idx] = elasticDocument{
+			"text":   doc.Text,
+			"vector": vector[idx],
+		}
+		// put metadata
+		for k, v := range doc.Metadata {
+			output[idx][k] = v
+		}
+	}
+
+	return
+}
+
+// hitToDocs convert es hits to document
+func hitToDocs(esRespBody ElasticResponse, additionalFields []string) (docs []document.Document, err error) {
+	hits := esRespBody.Hits.Hits
+	for _, hit := range hits {
+		var source map[string]interface{}
+		err = json.Unmarshal(hit.Source_, &source)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		doc := document.Document{Text: source["text"].(string), Metadata: make(map[string]interface{})}
+		for _, field := range additionalFields {
+			doc.Metadata[field] = source[field]
+		}
+		docs = append(docs, doc)
+	}
+	return
+}
