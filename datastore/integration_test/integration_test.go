@@ -143,3 +143,15 @@ func TestElastic(t *testing.T) {
 	response, err = esClient.SearchVector(context.Background(), strings.ToLower(className), vectorQuery, datastore.WithAdditionalFields([]string{"url", "time", "nothing"}))
 	assert.NoError(t, err)
 	if len(response) > 0 {
+		assert.Contains(t, response[0].Text, "skyline")
+		assert.Contains(t, response[0].Text, "skyline")
+		assert.Equal(t, response[0].Metadata["url"], "https://wejick.wordpress.com")
+		assert.Equal(t, response[0].Metadata["time"], float64(1847))
+		assert.Equal(t, response[0].Metadata["nothing"], nil)
+	} else {
+		t.Error("response is empty")
+	}
+
+	err = esClient.DeleteIndex(context.Background(), strings.ToLower(className))
+	assert.NoError(t, err)
+}
