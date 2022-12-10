@@ -25,4 +25,21 @@ type WeaviateVectorStore struct {
 
 // NewWeaviateVectorStore return new Weaviate Vector Store instance
 // headers is optional, if you want to add additional headers to the request
-func NewWeaviateVectorStore(host string, scheme string, apiKey string, embeddingModel model.EmbeddingModel, hea
+func NewWeaviateVectorStore(host string, scheme string, apiKey string, embeddingModel model.EmbeddingModel, headers map[string]string) (WVS *WeaviateVectorStore, err error) {
+	WVS = &WeaviateVectorStore{
+		existClass:     map[string]bool{},
+		embeddingModel: embeddingModel,
+	}
+	cfg := weaviate.Config{
+		Host:       host,
+		Scheme:     scheme,
+		Headers:    headers,
+		AuthConfig: auth.ApiKey{Value: apiKey},
+	}
+	WVS.client, err = weaviate.NewClient(cfg)
+
+	return
+}
+
+// SearchVector query weaviate using vector
+// for weaviate support to return additional field /
