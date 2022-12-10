@@ -15,4 +15,14 @@ import (
 
 var _ datastore.VectorStore = &WeaviateVectorStore{}
 
-// WeaviateVe
+// WeaviateVectorStore provide access to weaviate vector db
+type WeaviateVectorStore struct {
+	client         *weaviate.Client
+	embeddingModel model.EmbeddingModel
+
+	existClass map[string]bool
+}
+
+// NewWeaviateVectorStore return new Weaviate Vector Store instance
+// headers is optional, if you want to add additional headers to the request
+func NewWeaviateVectorStore(host string, scheme string, apiKey string, embeddingModel model.EmbeddingModel, hea
