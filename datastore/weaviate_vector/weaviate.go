@@ -42,4 +42,16 @@ func NewWeaviateVectorStore(host string, scheme string, apiKey string, embedding
 }
 
 // SearchVector query weaviate using vector
-// for weaviate support to return additional field /
+// for weaviate support to return additional field / metadata is not yet implemented,
+func (W *WeaviateVectorStore) SearchVector(ctx context.Context, className string, vector []float32, options ...func(*datastore.Option)) (output []document.Document, err error) {
+	opts := datastore.Option{}
+	for _, opt := range options {
+		opt(&opts)
+	}
+
+	if opts.Similarity == 0 {
+		opts.Similarity = 0.8
+	}
+
+	query := W.client.GraphQL().NearVectorArgBuilder().WithVector(vector).WithCertainty(opts.Similarity)
+	fields := 
