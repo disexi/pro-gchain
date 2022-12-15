@@ -93,4 +93,21 @@ func (W *WeaviateVectorStore) AddText(ctx context.Context, className string, inp
 }
 
 // AddDocuments add multiple string documents
-func (W *WeaviateVectorStore) AddDocuments(ctx context.Context, className string, documents []document.Document) (batchErr []error, err erro
+func (W *WeaviateVectorStore) AddDocuments(ctx context.Context, className string, documents []document.Document) (batchErr []error, err error) {
+	err = W.createClassIfNotExist(ctx, className)
+	if err != nil {
+		return
+	}
+
+	objVectors, err := W.embeddingModel.EmbedDocuments(document.DocumentsToStrings(documents))
+	if err != nil {
+		return
+	}
+	objs := documentsToObject(className, documents, objVectors)
+	batchResp, err := W.client.Batch().ObjectsBatcher().WithObjects(objs...).Do(ctx)
+	if err != nil {
+		return
+	}
+	for _, res := range batchResp {
+		if res.Result.Errors != nil {
+			batchErr = append(batchErr, errors
