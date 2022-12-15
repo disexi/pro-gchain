@@ -70,4 +70,15 @@ func (W *WeaviateVectorStore) SearchVector(ctx context.Context, className string
 
 	output, err = objectsToDocument(className, resp.Data["Get"], opts.AdditionalFields)
 
-	r
+	return
+}
+
+// Search query weaviate db, the query parameter will be translated into embedding
+// the underlying query is the same with SearchVector
+func (W *WeaviateVectorStore) Search(ctx context.Context, className string, query string, options ...func(*datastore.Option)) (output []document.Document, err error) {
+	vectorQuery, err := W.embeddingModel.EmbedQuery(query)
+	if err != nil {
+		return
+	}
+
+	output, er
