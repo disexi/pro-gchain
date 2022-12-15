@@ -110,4 +110,20 @@ func (W *WeaviateVectorStore) AddDocuments(ctx context.Context, className string
 	}
 	for _, res := range batchResp {
 		if res.Result.Errors != nil {
-			batchErr = append(batchErr, errors
+			batchErr = append(batchErr, errors.New(res.Result.Errors.Error[0].Message))
+		}
+	}
+
+	return
+}
+
+// objectsToDocument convert objects of weaviate query result to gchain document
+func objectsToDocument(className string, getObjects models.JSONObject, additionalField []string) (docs []document.Document, err error) {
+	/* Response from weaviate
+		{
+	    "data": {
+	        "Get": {
+	            "className	": [
+	                {
+	                    "answer": "DNA",
+	        
