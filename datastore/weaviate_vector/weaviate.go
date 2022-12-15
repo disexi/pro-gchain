@@ -126,4 +126,15 @@ func objectsToDocument(className string, getObjects models.JSONObject, additiona
 	            "className	": [
 	                {
 	                    "answer": "DNA",
-	        
+	                    "category": "SCIENCE",
+	                    "question": "In 1953 Watson & Crick built a model of the molecular structure of this, the gene-carrying substance"
+	                },
+	                {
+	                    "answer": "Liver",
+	                    "category": "SCIENCE",
+	                    "question": "This organ removes excess glucose from the blood & stores it as glycogen"
+	                }
+	            ]
+	        }
+	    }
+		}
