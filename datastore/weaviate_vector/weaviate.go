@@ -81,4 +81,16 @@ func (W *WeaviateVectorStore) Search(ctx context.Context, className string, quer
 		return
 	}
 
-	output, er
+	output, err = W.SearchVector(ctx, className, vectorQuery)
+
+	return
+}
+
+// AddText add single string document
+func (W *WeaviateVectorStore) AddText(ctx context.Context, className string, input string) (err error) {
+	_, err = W.AddDocuments(ctx, className, []document.Document{{Text: input}})
+	return
+}
+
+// AddDocuments add multiple string documents
+func (W *WeaviateVectorStore) AddDocuments(ctx context.Context, className string, documents []document.Document) (batchErr []error, err erro
