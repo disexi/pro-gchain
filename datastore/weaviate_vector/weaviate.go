@@ -138,3 +138,23 @@ func objectsToDocument(className string, getObjects models.JSONObject, additiona
 	        }
 	    }
 		}
+	*/
+
+	Get, ok := getObjects.(map[string]interface{})
+	if !ok {
+		return
+	}
+
+	result, ok := Get[className].([]interface{})
+	if !ok {
+		return
+	}
+
+	for _, data := range result {
+		if dataMap, ok := data.(map[string]interface{}); ok {
+			doc := document.Document{
+				Text:     dataMap["text"].(string),
+				Metadata: make(map[string]interface{}),
+			}
+			for _, field := range additionalField {
+				doc.Metadata[field] = dataMap[fie
