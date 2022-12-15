@@ -54,4 +54,20 @@ func (W *WeaviateVectorStore) SearchVector(ctx context.Context, className string
 	}
 
 	query := W.client.GraphQL().NearVectorArgBuilder().WithVector(vector).WithCertainty(opts.Similarity)
-	fields := 
+	fields := []graphql.Field{
+		{Name: "text"},
+	}
+	// add additional fields
+	for _, fieldName := range opts.AdditionalFields {
+		fields = append(fields, graphql.Field{
+			Name: fieldName,
+		})
+	}
+	resp, err := W.client.GraphQL().Get().WithClassName(className).WithNearVector(query).WithFields(fields...).WithLimit(5).Do(ctx)
+	if err != nil {
+		return
+	}
+
+	output, err = objectsToDocument(className, resp.Data["Get"], opts.AdditionalFields)
+
+	r
