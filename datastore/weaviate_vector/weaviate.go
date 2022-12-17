@@ -157,4 +157,24 @@ func objectsToDocument(className string, getObjects models.JSONObject, additiona
 				Metadata: make(map[string]interface{}),
 			}
 			for _, field := range additionalField {
-				doc.Metadata[field] = dataMap[fie
+				doc.Metadata[field] = dataMap[field]
+			}
+			docs = append(docs, doc)
+		}
+	}
+
+	return
+}
+
+func documentsToObject(className string, documents []document.Document, vectors [][]float32) (objs []*models.Object) {
+	for idx, doc := range documents {
+		properties := map[string]any{
+			"text": doc.Text,
+		}
+		// Put metadata to properties
+		for key, val := range doc.Metadata {
+			properties[key] = val
+		}
+		objs = append(objs, &models.Object{
+			Class:      className,
+			Pr
