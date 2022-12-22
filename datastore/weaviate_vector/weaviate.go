@@ -177,4 +177,25 @@ func documentsToObject(className string, documents []document.Document, vectors 
 		}
 		objs = append(objs, &models.Object{
 			Class:      className,
-			Pr
+			Properties: properties,
+			Vector:     vectors[idx],
+		})
+	}
+	return
+}
+
+func (W *WeaviateVectorStore) createClassIfNotExist(ctx context.Context, className string) (err error) {
+	classExist, err := W.isClassExist(ctx, className)
+	if !classExist {
+		// create classHere
+		err = W.createClass(ctx, className)
+		if err != nil {
+			return
+		}
+		W.existClass[className] = true
+	}
+
+	return
+}
+
+// createClass with default schema
