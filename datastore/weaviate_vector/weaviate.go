@@ -215,4 +215,19 @@ func (W *WeaviateVectorStore) createClass(ctx context.Context, className string)
 }
 
 // isClassExist check existance of a class
-func (W *WeaviateVectorStore) isClassExist(ctx context.Context, class
+func (W *WeaviateVectorStore) isClassExist(ctx context.Context, className string) (exist bool, err error) {
+	if val, ok := W.existClass[className]; ok {
+		return val, nil
+	}
+	exist, err = W.client.Schema().ClassExistenceChecker().WithClassName(className).Do(ctx)
+	if err != nil {
+		return
+	}
+	W.existClass[className] = exist
+
+	return
+}
+
+// DeleteIndex will delete a class
+func (W *WeaviateVectorStore) DeleteIndex(ctx context.Context, className string) (err error) {
+	err = W.client.Schema().ClassDeleter().W
