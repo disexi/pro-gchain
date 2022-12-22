@@ -199,3 +199,20 @@ func (W *WeaviateVectorStore) createClassIfNotExist(ctx context.Context, classNa
 }
 
 // createClass with default schema
+func (W *WeaviateVectorStore) createClass(ctx context.Context, className string) (err error) {
+	classSchema := &models.Class{
+		Class: className,
+		Properties: []*models.Property{
+			{
+				Name:     "text",
+				DataType: []string{"text"},
+			},
+		},
+	}
+	err = W.client.Schema().ClassCreator().WithClass(classSchema).Do(ctx)
+
+	return
+}
+
+// isClassExist check existance of a class
+func (W *WeaviateVectorStore) isClassExist(ctx context.Context, class
