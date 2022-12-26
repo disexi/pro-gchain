@@ -17,4 +17,21 @@ type QARelevanceEval struct {
 	llmModel           model.LLMModel
 	evaluationTemplate *prompt.PromptTemplate
 	fact               string
-	question      
+	question           string
+}
+
+func NewQARelevanceEval(model model.LLMModel, fact, question string) (evaluator *QARelevanceEval) {
+	evaluationTemplate, _ := prompt.NewPromptTemplate("evaluation", QARelevanceInstruction)
+
+	evaluator = &QARelevanceEval{
+		llmModel:           model,
+		question:           question,
+		fact:               fact,
+		evaluationTemplate: evaluationTemplate,
+	}
+
+	return
+}
+
+func (A *QARelevanceEval) Evaluate(answer string) (bool, error) {
+	data := make(map[st
