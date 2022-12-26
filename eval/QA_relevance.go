@@ -6,4 +6,15 @@ import (
 	"errors"
 
 	"github.com/wejick/gchain/model"
-	"github.com/we
+	"github.com/wejick/gchain/prompt"
+)
+
+// QARelevanceEval is grading whether the the answer relevant to the question according to the given fact.
+// Example :
+// -> NewQARelevanceEval(model, "The color of the sky is blue","What is the color of the sky?").Evaluate("When I go outside, I see the sky is blue")
+// -> True
+type QARelevanceEval struct {
+	llmModel           model.LLMModel
+	evaluationTemplate *prompt.PromptTemplate
+	fact               string
+	question      
