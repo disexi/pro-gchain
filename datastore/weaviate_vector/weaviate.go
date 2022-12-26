@@ -230,4 +230,6 @@ func (W *WeaviateVectorStore) isClassExist(ctx context.Context, className string
 
 // DeleteIndex will delete a class
 func (W *WeaviateVectorStore) DeleteIndex(ctx context.Context, className string) (err error) {
-	err = W.client.Schema().ClassDeleter().W
+	err = W.client.Schema().ClassDeleter().WithClassName(className).Do(ctx)
+	return
+}

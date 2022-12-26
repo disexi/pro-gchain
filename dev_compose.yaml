@@ -1,0 +1,15 @@
+version: '3.4'
+services:
+  dev_elasticsearch:
+    image: bitnami/elasticsearch:8.8.1
+    container_name: dev_elasticsearch
+    restart: always
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+  
+  dev_weaviate:
+    image: semitechnologies/weaviate:1.19.8
+    ports:
