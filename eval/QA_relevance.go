@@ -65,4 +65,14 @@ const QARelevanceInstruction = `You are grading whether the provided answer is a
 Examples:
 Fact: Today the weather is nice and the sky is blue
 Question: What is the color of the sky?
-Answer:
+Answer: The sky is blue
+{"reason": "the sky is blue","pass": true}
+
+Fact: Today the weather is gloomy and the sky is grey
+Question: Do you love the weather?
+Answer: The sky is blue
+{"reason": "Question is not related to the answer","pass": false}
+
+Fact: {{.fact}}
+Question: {{.question}}
+Answer: {{.answer}}`
