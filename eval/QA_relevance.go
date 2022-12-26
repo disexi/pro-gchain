@@ -34,4 +34,24 @@ func NewQARelevanceEval(model model.LLMModel, fact, question string) (evaluator 
 }
 
 func (A *QARelevanceEval) Evaluate(answer string) (bool, error) {
-	data := make(map[st
+	data := make(map[string]string)
+	data["fact"] = A.fact
+	data["question"] = A.question
+	data["answer"] = answer
+
+	prompt, err := A.evaluationTemplate.FormatPrompt(data)
+	if err != nil {
+		return false, err
+	}
+	output, err := A.llmModel.Call(context.Background(), prompt, model.WithMaxToken(1000))
+	if err != nil {
+		return false, err
+	}
+
+	evalOutput := llmEvalOutput{}
+	err = json.Unmarshal([]byte(output), &evalOutput)
+	if err != nil {
+		return false, err
+	}
+
+	if !evalOutput.Pass 
