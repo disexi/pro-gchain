@@ -54,4 +54,15 @@ func (A *QARelevanceEval) Evaluate(answer string) (bool, error) {
 		return false, err
 	}
 
-	if !evalOutput.Pass 
+	if !evalOutput.Pass {
+		return false, errors.New(evalOutput.Reason)
+	}
+
+	return true, nil
+}
+
+const QARelevanceInstruction = `You are grading whether the provided answer is answering the question. If the answer is relevant, then the output passes the test. You respond with a JSON object with this structure: {pass: boolean; reason: string;}. Only return the JSON object.
+Examples:
+Fact: Today the weather is nice and the sky is blue
+Question: What is the color of the sky?
+Answer:
