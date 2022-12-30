@@ -33,4 +33,26 @@ type Test struct {
 	Input       string
 	Expectation string
 	Reason      string
-	Result      b
+	Result      bool
+}
+
+func main() {
+	// open csv file from o
+	// read csv file
+	// for each row
+	// put to array of Test
+	tests, err := readCSV(o)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var authToken = os.Getenv("OPENAI_API_KEY")
+	chatModel := _openai.NewOpenAIChatModel(authToken, _openai.GPT3Dot5Turbo0301, callback.NewManager())
+
+	testRunner(tests, chatModel)
+}
+
+func testRunner(test []Test, llmModel model.LLMModel) {
+	jsonEvaluator := eval.NewValidJson()
+	var testResult
