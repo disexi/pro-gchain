@@ -91,4 +91,29 @@ func readCSV(filename string) ([]Test, error) {
 	}
 	defer file.Close()
 
-	reader := csv.NewR
+	reader := csv.NewReader(file)
+	// Read the first line to skip it
+	if _, err := reader.Read(); err != nil {
+		return nil, err
+	}
+
+	for {
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+
+		test := Test{
+			Name:        record[0],
+			Evaluator:   record[1],
+			Input:       record[2],
+			Expectation: record[3],
+		}
+		tests = append(tests, test)
+	}
+
+	return tests, nil
+}
