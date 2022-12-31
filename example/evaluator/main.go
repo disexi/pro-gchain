@@ -55,4 +55,20 @@ func main() {
 
 func testRunner(test []Test, llmModel model.LLMModel) {
 	jsonEvaluator := eval.NewValidJson()
-	var testResult
+	var testResult []Test
+	for _, t := range test {
+		var evaluator eval.Evaluator
+		if t.Evaluator == "valid_json" {
+			evaluator = jsonEvaluator
+		} else if t.Evaluator == "correctness" {
+			evaluator = eval.NewCorrectnessEval(llmModel, t.Expectation)
+		}
+		var errReason error
+		t.Result, errReason = evaluator.Evaluate(t.Input)
+		if errReason != nil {
+			t.Reason = errReason.Error()
+		}
+		testResult = append(testResult, t)
+	}
+
+	fmt.Println("Test Resul
