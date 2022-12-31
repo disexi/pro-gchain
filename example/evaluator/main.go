@@ -71,4 +71,24 @@ func testRunner(test []Test, llmModel model.LLMModel) {
 		testResult = append(testResult, t)
 	}
 
-	fmt.Println("Test Resul
+	fmt.Println("Test Result")
+	for _, t := range testResult {
+		fmt.Printf("Test Name: %s\n", t.Name)
+		fmt.Printf("Test Input: %s\n", t.Input)
+		fmt.Printf("Test Expectation: %s\n", t.Expectation)
+		fmt.Printf("Test Result: %v\n", t.Result)
+		fmt.Printf("Test Reason: %s\n", t.Reason)
+		fmt.Println("========================================")
+	}
+}
+
+func readCSV(filename string) ([]Test, error) {
+	var tests []Test
+
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	reader := csv.NewR
