@@ -20,4 +20,16 @@ func main() {
 	greeter := greeting.NewGreetingTool()
 
 	// prepare a function register
-	functionList := map[string
+	functionList := map[string]func(string) string{
+		greeter.GetFunctionDefinition().Name: func(parameter string) string {
+			greeting, err := greeter.SimpleRun(context.Background(), parameter)
+			if err != nil {
+				log.Println(err)
+			}
+			return greeting
+		},
+	}
+
+	// The first call to the model, to see whether function call is needed
+	memory = append(memory, model.ChatMessage{Role: model.ChatMessageRoleUser, Content: "Hi I'm Gio"})
+	functionDef := greeter.Ge
