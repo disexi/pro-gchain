@@ -32,4 +32,17 @@ func main() {
 
 	// The first call to the model, to see whether function call is needed
 	memory = append(memory, model.ChatMessage{Role: model.ChatMessageRoleUser, Content: "Hi I'm Gio"})
-	functionDef := greeter.Ge
+	functionDef := greeter.GetFunctionDefinition()
+
+	response, err := chatModel.Chat(context.Background(), memory, model.WithFunctions([]model.FunctionDefinition{functionDef}))
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(response)
+
+	// append the first response to memory
+	memory = append(memory, model.ChatMessage{Role: model.ChatMessageRoleAssistant, Content: response.Content, Name: response.Name})
+
+	// check if function call needed
+	if response.Name != "" {
+		// call the function and get 
