@@ -43,3 +43,101 @@ func Init() (err error) {
 	textplitter, err = textsplitter.NewTikTokenSplitter(_openai.GPT3Dot5Turbo0301)
 	if err != nil {
 		log.Println(err)
+		return
+	}
+	embeddingModel = _openai.NewOpenAIEmbedModel(OAIauthToken, openai.AdaEmbeddingV2)
+	chatModel = _openai.NewOpenAIChatModel(OAIauthToken, _openai.GPT3Dot5Turbo0301, callback.NewManager())
+
+	wvClient, err = weaviateVS.NewWeaviateVectorStore(wvhost, wvscheme, wvApiKey, embeddingModel, nil)
+	if err != nil {
+		log.Println(err.Error() + "can't connect to weaviate")
+	}
+
+	return
+}
+
+func main() {
+	indexFlag := flag.Bool("index", false, "Specify the --index flag to run the index function")
+	deleteFlag := flag.Bool("delete", false, "Specify the --delete flag to run the delete function")
+
+	flag.Parse()
+
+	if Init() != nil {
+		return
+	}
+
+	if *indexFlag {
+		Indexing()
+	} else if *deleteFlag {
+		DeleteIndex()
+	} else {
+		Chatting([]model.ChatMessage{})
+	}
+}
+
+func Chatting(memory []model.ChatMessage) {
+	chain := conversational_retrieval.NewConversationalRetrievalChain(chatModel, memory, wvClient, "Indonesia", textplitter, callback.NewManager(), "", 2000, false)
+	fmt.Println("AI : How can I help you, I know many things about indonesia")
+	scanner := bufio.NewScanner(os.Stdin)
+	for {
+		fmt.Print("User : ")
+		scanner.Scan()
+		input := scanner.Text()
+		output, err := chain.Run(context.Background(), map[string]string{"input": input})
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		fmt.Println("AI : " + output["output"])
+	}
+}
+
+func DeleteIndex() (err error) {
+	err = wvClient.DeleteIndex(context.Background(), "Indonesia")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
+}
+
+func Indexing() (err error) {
+	indexingplitter, err := textsplitter.NewTikTokenSplitter(openai.AdaEmbeddingV2.String())
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	sources := []source{
+		{filename: "indonesia.txt", url: "https://en.wikipedia.org/wiki/Indonesia"},
+		{filename: "history_of_indonesia.txt", url: "https://en.wikipedia.org/wiki/History_of_Indonesia"},
+	}
+	for idx, s := range sources {
+		data, err := os.ReadFile(s.filename)
+		if err != nil {
+			log.Println(err)
+			continue
+		}
+		sources[idx].doc = string(data)
+	}
+
+	var docs []document.Document
+	docIndonesia := document.Document{
+		Text:     sources[0].doc,
+		Metadata: map[string]interface{}{"url": sources[0].url},
+	}
+	docHistoryOfIndonesia := document.Document{Text: sources[1].doc,
+		Metadata: map[string]interface{}{"url": sources[1].url},
+	}
+
+	docs = indexingplitter.SplitDocument(docIndonesia, 500, 0)
+	docs = append(docs, indexingplitter.SplitDocument(docHistoryOfIndonesia, 500, 0)...)
+
+	bErr, err := wvClient.AddDocuments(context.Background(), "Indonesia", docs)
+	if err != nil {
+		log.Println(err)
+		log.Println(bErr)
+		return
+	}
+
+	return
+}
