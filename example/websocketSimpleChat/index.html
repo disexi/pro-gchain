@@ -32,4 +32,24 @@
             border-radius: 30px;
         }
 
-        /* talk
+        /* talk bubble contents */
+        .talktext {
+            padding: 1em;
+            text-align: left;
+            line-height: 1.5em;
+        }
+
+        .container {
+            min-width: 400px;
+            width: 40%;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="chat"></div>
+        <form id="chat_form">
+            <input id="message" type="text" placeholder="message" style="width: 60%;padding: 10px;" class="round" />
+   
