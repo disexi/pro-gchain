@@ -52,4 +52,15 @@
         <div id="chat"></div>
         <form id="chat_form">
             <input id="message" type="text" placeholder="message" style="width: 60%;padding: 10px;" class="round" />
-   
+            <input class="button" type="submit" value="Submit" role="button" style="padding: 10px;">
+        </form>
+    </div>
+
+    <script>
+        const connection = new WebSocket(" ws://127.0.0.1:8000/chat"); var counter = 0; new_chat_placeholder();
+        connection.onopen = (event) => {
+            console.log("WebSocket is open now.");
+        };
+
+        connection.onclose = (event) => {
+            console.log("WebSocket is closed now.");
