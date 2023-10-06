@@ -77,4 +77,15 @@
             chat.innerHTML += message.text;
         };
 
-        document.getElementById('chat_form').addEve
+        document.getElementById('chat_form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevents the default form submission
+
+            const message = document.querySelector("#message");
+            const data = `{"message": "${message.value}","kind":"chat"}`;
+
+            // create new message place holder here
+            counter++;
+            new_user_chat(message.value);
+            new_chat_placeholder();
+
+            // Send composed me
