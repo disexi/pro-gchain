@@ -88,4 +88,17 @@
             new_user_chat(message.value);
             new_chat_placeholder();
 
-            // Send composed me
+            // Send composed message to the server
+            connection.send(data);
+
+            // clear input fields
+            message.value = "";
+
+        });
+
+        function new_chat_placeholder() {
+            const chat = document.querySelector("#chat");
+            const newChat = document.createElement("div");
+            newChat.id = get_current_chat_id();
+            newChat.className = "talk-bubble-ai round talktext";
+            chat.appendChild(
