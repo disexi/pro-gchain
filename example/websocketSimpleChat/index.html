@@ -101,4 +101,17 @@
             const newChat = document.createElement("div");
             newChat.id = get_current_chat_id();
             newChat.className = "talk-bubble-ai round talktext";
-            chat.appendChild(
+            chat.appendChild(newChat);
+        }
+        function new_user_chat(message) {
+            const chat = document.querySelector("#chat");
+            const newChat = document.createElement("div");
+            newChat.id = 'chat-user-' + counter;
+            newChat.className = "talk-bubble round talktext";
+            newChat.innerHTML += message;
+            chat.appendChild(newChat);
+        }
+        function get_current_chat_id() {
+            return 'chat-' + counter;
+        }
+    </
