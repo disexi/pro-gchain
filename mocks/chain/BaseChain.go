@@ -33,4 +33,19 @@ func (_m *BaseChain) Run(ctx context.Context, prompt map[string]string, options 
 	if rf, ok := ret.Get(0).(func(context.Context, map[string]string, ...func(*model.Option)) map[string]string); ok {
 		r0 = rf(ctx, prompt, options...)
 	} else {
-		if ret.Get(0) !
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(map[string]string)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, map[string]string, ...func(*model.Option)) error); ok {
+		r1 = rf(ctx, prompt, options...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// SimpleRun provides a mock function with given fields: ctx, prompt, options
+func (_m *BaseChain) SimpleRun(ctx context.Context, prompt string, options ...func(*model.Option)) (string, error)
