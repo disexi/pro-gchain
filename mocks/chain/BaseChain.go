@@ -21,4 +21,16 @@ func (_m *BaseChain) Run(ctx context.Context, prompt map[string]string, options 
 		_va[_i] = options[_i]
 	}
 	var _ca []interface{}
-	_ca = append(_ca, ctx,
+	_ca = append(_ca, ctx, prompt)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 map[string]string
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string, ...func(*model.Option)) (map[string]string, error)); ok {
+		return rf(ctx, prompt, options...)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, map[string]string, ...func(*model.Option)) map[string]string); ok {
+		r0 = rf(ctx, prompt, options...)
+	} else {
+		if ret.Get(0) !
