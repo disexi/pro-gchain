@@ -22,4 +22,18 @@ func (_m *CombinedDocument) Combine(ctx context.Context, docs []string, options 
 	}
 	var _ca []interface{}
 	_ca = append(_ca, ctx, docs)
-	_ca = append(_ca, _va
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 string
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, []string, ...func(*model.Option)) (string, error)); ok {
+		return rf(ctx, docs, options...)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, []string, ...func(*model.Option)) string); ok {
+		r0 = rf(ctx, docs, options...)
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, []string, ..
