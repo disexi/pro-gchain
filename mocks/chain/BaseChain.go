@@ -78,4 +78,16 @@ func (_m *BaseChain) SimpleRun(ctx context.Context, prompt string, options ...fu
 	return r0, r1
 }
 
-// NewBaseChain creates a new instance of BaseChain. It also registers a testing interface on the mock and a cleanup function to assert the mocks ex
+// NewBaseChain creates a new instance of BaseChain. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewBaseChain(t interface {
+	mock.TestingT
+	Cleanup(func())
+}) *BaseChain {
+	mock := &BaseChain{}
+	mock.Mock.Test(t)
+
+	t.Cleanup(func() { mock.AssertExpectations(t) })
+
+	return mock
+}
