@@ -63,4 +63,19 @@ func (_m *BaseChain) SimpleRun(ctx context.Context, prompt string, options ...fu
 	if rf, ok := ret.Get(0).(func(context.Context, string, ...func(*model.Option)) (string, error)); ok {
 		return rf(ctx, prompt, options...)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, string, ..
+	if rf, ok := ret.Get(0).(func(context.Context, string, ...func(*model.Option)) string); ok {
+		r0 = rf(ctx, prompt, options...)
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string, ...func(*model.Option)) error); ok {
+		r1 = rf(ctx, prompt, options...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// NewBaseChain creates a new instance of BaseChain. It also registers a testing interface on the mock and a cleanup function to assert the mocks ex
