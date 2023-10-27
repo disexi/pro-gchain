@@ -50,4 +50,11 @@ func (_m *CombinedDocument) Combine(ctx context.Context, docs []string, options 
 func NewCombinedDocument(t interface {
 	mock.TestingT
 	Cleanup(func())
-}) *CombinedDocume
+}) *CombinedDocument {
+	mock := &CombinedDocument{}
+	mock.Mock.Test(t)
+
+	t.Cleanup(func() { mock.AssertExpectations(t) })
+
+	return mock
+}
