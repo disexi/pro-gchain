@@ -36,4 +36,18 @@ func (_m *CombinedDocument) Combine(ctx context.Context, docs []string, options 
 		r0 = ret.Get(0).(string)
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, []string, ..
+	if rf, ok := ret.Get(1).(func(context.Context, []string, ...func(*model.Option)) error); ok {
+		r1 = rf(ctx, docs, options...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// NewCombinedDocument creates a new instance of CombinedDocument. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewCombinedDocument(t interface {
+	mock.TestingT
+	Cleanup(func())
+}) *CombinedDocume
