@@ -22,4 +22,17 @@ func (_m *VectorStore) AddDocuments(ctx context.Context, indexName string, docum
 
 	var r0 []error
 	var r1 error
-	if 
+	if rf, ok := ret.Get(0).(func(context.Context, string, []document.Document) ([]error, error)); ok {
+		return rf(ctx, indexName, documents)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string, []document.Document) []error); ok {
+		r0 = rf(ctx, indexName, documents)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]error)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string, []document.Document) error); ok {
+		r1 = rf(ctx, indexName, documents)
+	} e
