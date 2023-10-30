@@ -56,4 +56,19 @@ func (_m *VectorStore) AddText(ctx context.Context, indexName string, input stri
 	return r0
 }
 
-// DeleteIndex provides a mock function with given fields:
+// DeleteIndex provides a mock function with given fields: ctx, indexName
+func (_m *VectorStore) DeleteIndex(ctx context.Context, indexName string) error {
+	ret := _m.Called(ctx, indexName)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) error); ok {
+		r0 = rf(ctx, indexName)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// Search provides a mock function with given fields: ctx, indexName, query, options
+func (_m *VectorStore) Search(ctx context.Context, indexName string, query strin
