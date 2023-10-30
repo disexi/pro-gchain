@@ -35,4 +35,25 @@ func (_m *VectorStore) AddDocuments(ctx context.Context, indexName string, docum
 
 	if rf, ok := ret.Get(1).(func(context.Context, string, []document.Document) error); ok {
 		r1 = rf(ctx, indexName, documents)
-	} e
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// AddText provides a mock function with given fields: ctx, indexName, input
+func (_m *VectorStore) AddText(ctx context.Context, indexName string, input string) error {
+	ret := _m.Called(ctx, indexName, input)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) error); ok {
+		r0 = rf(ctx, indexName, input)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// DeleteIndex provides a mock function with given fields:
