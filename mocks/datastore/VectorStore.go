@@ -71,4 +71,16 @@ func (_m *VectorStore) DeleteIndex(ctx context.Context, indexName string) error 
 }
 
 // Search provides a mock function with given fields: ctx, indexName, query, options
-func (_m *VectorStore) Search(ctx context.Context, indexName string, query strin
+func (_m *VectorStore) Search(ctx context.Context, indexName string, query string, options ...func(*datastore.Option)) ([]document.Document, error) {
+	_va := make([]interface{}, len(options))
+	for _i := range options {
+		_va[_i] = options[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, ctx, indexName, query)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 []document.Document
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, ...func(*datastore.Option)) ([]document.Doc
