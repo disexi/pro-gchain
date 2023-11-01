@@ -110,4 +110,14 @@ func (_m *VectorStore) SearchVector(ctx context.Context, indexName string, vecto
 		_va[_i] = options[_i]
 	}
 	var _ca []interface{}
-	_ca = append(_ca, c
+	_ca = append(_ca, ctx, indexName, vector)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 []document.Document
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, []float32, ...func(*datastore.Option)) ([]document.Document, error)); ok {
+		return rf(ctx, indexName, vector, options...)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string, []float32, ...func(*datastore.Option)) []document.Document); ok {
+		r0 = rf(ctx, indexName, vector,
