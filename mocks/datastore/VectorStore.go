@@ -83,4 +83,17 @@ func (_m *VectorStore) Search(ctx context.Context, indexName string, query strin
 
 	var r0 []document.Document
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, string, string, ...func(*datastore.Option)) ([]document.Doc
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, ...func(*datastore.Option)) ([]document.Document, error)); ok {
+		return rf(ctx, indexName, query, options...)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, ...func(*datastore.Option)) []document.Document); ok {
+		r0 = rf(ctx, indexName, query, options...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]document.Document)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string, string, ...func(*datastore.Option)) error); ok {
+		r1 = rf(ctx, indexName, query, options...)
+	} else 
