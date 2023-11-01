@@ -96,4 +96,18 @@ func (_m *VectorStore) Search(ctx context.Context, indexName string, query strin
 
 	if rf, ok := ret.Get(1).(func(context.Context, string, string, ...func(*datastore.Option)) error); ok {
 		r1 = rf(ctx, indexName, query, options...)
-	} else 
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// SearchVector provides a mock function with given fields: ctx, indexName, vector, options
+func (_m *VectorStore) SearchVector(ctx context.Context, indexName string, vector []float32, options ...func(*datastore.Option)) ([]document.Document, error) {
+	_va := make([]interface{}, len(options))
+	for _i := range options {
+		_va[_i] = options[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, c
