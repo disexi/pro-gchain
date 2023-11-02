@@ -120,4 +120,20 @@ func (_m *VectorStore) SearchVector(ctx context.Context, indexName string, vecto
 		return rf(ctx, indexName, vector, options...)
 	}
 	if rf, ok := ret.Get(0).(func(context.Context, string, []float32, ...func(*datastore.Option)) []document.Document); ok {
-		r0 = rf(ctx, indexName, vector,
+		r0 = rf(ctx, indexName, vector, options...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]document.Document)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string, []float32, ...func(*datastore.Option)) error); ok {
+		r1 = rf(ctx, indexName, vector, options...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// NewVectorStore creates a new instance of VectorStore. It also registers a testing interface on the mock and a cleanup function to assert the mo
