@@ -136,4 +136,16 @@ func (_m *VectorStore) SearchVector(ctx context.Context, indexName string, vecto
 	return r0, r1
 }
 
-// NewVectorStore creates a new instance of VectorStore. It also registers a testing interface on the mock and a cleanup function to assert the mo
+// NewVectorStore creates a new instance of VectorStore. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewVectorStore(t interface {
+	mock.TestingT
+	Cleanup(func())
+}) *VectorStore {
+	mock := &VectorStore{}
+	mock.Mock.Test(t)
+
+	t.Cleanup(func() { mock.AssertExpectations(t) })
+
+	return mock
+}
