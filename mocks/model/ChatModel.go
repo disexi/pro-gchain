@@ -61,4 +61,19 @@ func (_m *ChatModel) Chat(ctx context.Context, messages []model.ChatMessage, opt
 	if rf, ok := ret.Get(0).(func(context.Context, []model.ChatMessage, ...func(*model.Option)) (model.ChatMessage, error)); ok {
 		return rf(ctx, messages, options...)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, []model.Ch
+	if rf, ok := ret.Get(0).(func(context.Context, []model.ChatMessage, ...func(*model.Option)) model.ChatMessage); ok {
+		r0 = rf(ctx, messages, options...)
+	} else {
+		r0 = ret.Get(0).(model.ChatMessage)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, []model.ChatMessage, ...func(*model.Option)) error); ok {
+		r1 = rf(ctx, messages, options...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// NewChatModel creates a new instance of ChatModel. It also registers a testing interfac
