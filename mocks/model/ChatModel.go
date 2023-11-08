@@ -31,4 +31,20 @@ func (_m *ChatModel) Call(ctx context.Context, prompt string, options ...func(*m
 		return rf(ctx, prompt, options...)
 	}
 	if rf, ok := ret.Get(0).(func(context.Context, string, ...func(*model.Option)) string); ok {
-		r0 = rf(ctx, prompt, options...
+		r0 = rf(ctx, prompt, options...)
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string, ...func(*model.Option)) error); ok {
+		r1 = rf(ctx, prompt, options...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// Chat provides a mock function with given fields: ctx, messages, options
+func (_m *ChatModel) Chat(ctx context.Context, messages []model.ChatMessage, options ...func(*model.Option)) (model.ChatMessage, error) {
+	_va := make([]in
