@@ -47,4 +47,18 @@ func (_m *ChatModel) Call(ctx context.Context, prompt string, options ...func(*m
 
 // Chat provides a mock function with given fields: ctx, messages, options
 func (_m *ChatModel) Chat(ctx context.Context, messages []model.ChatMessage, options ...func(*model.Option)) (model.ChatMessage, error) {
-	_va := make([]in
+	_va := make([]interface{}, len(options))
+	for _i := range options {
+		_va[_i] = options[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, ctx, messages)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 model.ChatMessage
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, []model.ChatMessage, ...func(*model.Option)) (model.ChatMessage, error)); ok {
+		return rf(ctx, messages, options...)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, []model.Ch
