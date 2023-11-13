@@ -76,4 +76,16 @@ func (_m *ChatModel) Chat(ctx context.Context, messages []model.ChatMessage, opt
 	return r0, r1
 }
 
-// NewChatModel creates a new instance of ChatModel. It also registers a testing interfac
+// NewChatModel creates a new instance of ChatModel. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewChatModel(t interface {
+	mock.TestingT
+	Cleanup(func())
+}) *ChatModel {
+	mock := &ChatModel{}
+	mock.Mock.Test(t)
+
+	t.Cleanup(func() { mock.AssertExpectations(t) })
+
+	return mock
+}
