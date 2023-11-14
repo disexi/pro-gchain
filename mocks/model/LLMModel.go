@@ -18,4 +18,22 @@ type LLMModel struct {
 func (_m *LLMModel) Call(ctx context.Context, prompt string, options ...func(*model.Option)) (string, error) {
 	_va := make([]interface{}, len(options))
 	for _i := range options {
-		_va[_i] = 
+		_va[_i] = options[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, ctx, prompt)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 string
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, ...func(*model.Option)) (string, error)); ok {
+		return rf(ctx, prompt, options...)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string, ...func(*model.Option)) string); ok {
+		r0 = rf(ctx, prompt, options...)
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	if rf, ok := re
