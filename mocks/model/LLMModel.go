@@ -36,4 +36,18 @@ func (_m *LLMModel) Call(ctx context.Context, prompt string, options ...func(*mo
 		r0 = ret.Get(0).(string)
 	}
 
-	if rf, ok := re
+	if rf, ok := ret.Get(1).(func(context.Context, string, ...func(*model.Option)) error); ok {
+		r1 = rf(ctx, prompt, options...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// NewLLMModel creates a new instance of LLMModel. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewLLMModel(t interface {
+	mock.TestingT
+	Cleanup(func())
+}) *LLMModel {
