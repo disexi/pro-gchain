@@ -19,4 +19,8 @@ func (C *ChatMessage) String() string {
 }
 
 const (
-	ChatMessageRole
+	ChatMessageRoleSystem    = "system"
+	ChatMessageRoleUser      = "user"
+	ChatMessageRoleAssistant = "assistant"
+	ChatMessageRoleFunction  = "function"
+)
