@@ -51,3 +51,10 @@ func NewLLMModel(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *LLMModel {
+	mock := &LLMModel{}
+	mock.Mock.Test(t)
+
+	t.Cleanup(func() { mock.AssertExpectations(t) })
+
+	return mock
+}
