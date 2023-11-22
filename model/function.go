@@ -35,4 +35,11 @@ func (F FunctionJsonSchema) String() string {
 	for key, value := range F.Properties {
 		var enumString string
 		if len(value.Enum) > 0 {
-			enumStri
+			enumString = strings.Join(value.Enum, ",")
+		} else {
+			enumString = "no"
+		}
+		paramString += "\n" + key + "|" + value.Description + "|" + string(value.Type) + "|" + enumString
+	}
+	return paramString
+}
