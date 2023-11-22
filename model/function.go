@@ -22,4 +22,17 @@ type FunctionJsonSchema struct {
 type FunctionDefinition struct {
 	Name        string             `json:"name,omitempty"`
 	Type        string             `json:"type,omitempty"`
-	D
+	Description string             `json:"description,omitempty"`
+	Parameters  FunctionJsonSchema `json:"parameters,omitempty"`
+}
+
+func (F FunctionJsonSchema) String() string {
+	var paramString string
+	if len(F.Required) > 0 {
+		paramString += "required = " + strings.Join(F.Required, ",")
+	}
+	paramString += "\nparameter|description|type|enum"
+	for key, value := range F.Properties {
+		var enumString string
+		if len(value.Enum) > 0 {
+			enumStri
