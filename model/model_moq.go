@@ -33,4 +33,20 @@ type LLMModelMock struct {
 
 	// calls tracks calls to the methods.
 	calls struct {
-		// Call
+		// Call holds details about calls to the Call method.
+		Call []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Prompt is the prompt argument value.
+			Prompt string
+			// Options is the options argument value.
+			Options []func(*Option)
+		}
+	}
+	lockCall sync.RWMutex
+}
+
+// Call calls CallFunc.
+func (mock *LLMModelMock) Call(ctx context.Context, prompt string, options ...func(*Option)) (string, error) {
+	if mock.CallFunc == nil {
+		panic("LLMMo
