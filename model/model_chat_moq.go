@@ -139,3 +139,6 @@ func (mock *ChatModelMock) ChatCalls() []struct {
 	}
 	mock.lockChat.RLock()
 	calls = mock.calls.Chat
+	mock.lockChat.RUnlock()
+	return calls
+}
