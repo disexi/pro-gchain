@@ -24,4 +24,6 @@ func TestFunctionJsonSchema_String(t *testing.T) {
 	paramString := parameter.String()
 	expectedString := "required = parameter1\nparameter|description|type|enum" + "\n"
 	expectedString += "parameter2|parameter 2 description|string|no" + "\n"
-	expectedString += "pa
+	expectedString += "parameter1|parameter 1 description|string|enum1,enum2"
+	assert.Equal(t, expectedString, paramString)
+}
