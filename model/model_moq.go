@@ -18,4 +18,19 @@ var _ LLMModel = &LLMModelMock{}
 //
 //		// make and configure a mocked LLMModel
 //		mockedLLMModel := &LLMModelMock{
+//			CallFunc: func(ctx context.Context, prompt string, options ...func(*Option)) (string, error) {
+//				panic("mock out the Call method")
+//			},
+//		}
 //
+//		// use mockedLLMModel in code that requires LLMModel
+//		// and then make assertions.
+//
+//	}
+type LLMModelMock struct {
+	// CallFunc mocks the Call method.
+	CallFunc func(ctx context.Context, prompt string, options ...func(*Option)) (string, error)
+
+	// calls tracks calls to the methods.
+	calls struct {
+		// Call
