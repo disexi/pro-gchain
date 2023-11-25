@@ -49,4 +49,22 @@ type LLMModelMock struct {
 // Call calls CallFunc.
 func (mock *LLMModelMock) Call(ctx context.Context, prompt string, options ...func(*Option)) (string, error) {
 	if mock.CallFunc == nil {
-		panic("LLMMo
+		panic("LLMModelMock.CallFunc: method is nil but LLMModel.Call was just called")
+	}
+	callInfo := struct {
+		Ctx     context.Context
+		Prompt  string
+		Options []func(*Option)
+	}{
+		Ctx:     ctx,
+		Prompt:  prompt,
+		Options: options,
+	}
+	mock.lockCall.Lock()
+	mock.calls.Call = append(mock.calls.Call, callInfo)
+	mock.lockCall.Unlock()
+	return mock.CallFunc(ctx, prompt, options...)
+}
+
+// CallCalls gets all the calls that were made to Call.
+// Check 
