@@ -67,4 +67,21 @@ func (mock *LLMModelMock) Call(ctx context.Context, prompt string, options ...fu
 }
 
 // CallCalls gets all the calls that were made to Call.
-// Check 
+// Check the length with:
+//
+//	len(mockedLLMModel.CallCalls())
+func (mock *LLMModelMock) CallCalls() []struct {
+	Ctx     context.Context
+	Prompt  string
+	Options []func(*Option)
+} {
+	var calls []struct {
+		Ctx     context.Context
+		Prompt  string
+		Options []func(*Option)
+	}
+	mock.lockCall.RLock()
+	calls = mock.calls.Call
+	mock.lockCall.RUnlock()
+	return calls
+}
