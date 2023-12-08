@@ -14,4 +14,12 @@ const (
 	GPT4                    = goopenai.GPT4
 	GPT3Dot5Turbo0613       = goopenai.GPT3Dot5Turbo0613
 	GPT3Dot5Turbo16K        = goopenai.GPT3Dot5Turbo16K
-	GPT3Dot5Turbo16K0613    = goopenai.GPT3Dot5Turbo
+	GPT3Dot5Turbo16K0613    = goopenai.GPT3Dot5Turbo16K0613
+	GPT3Dot5Turbo0301       = goopenai.GPT3Dot5Turbo0301
+	GPT3Dot5Turbo           = goopenai.GPT3Dot5Turbo
+	GPT3TextDavinci003      = goopenai.GPT3TextDavinci003
+	GPT3TextDavinci002      = goopenai.GPT3TextDavinci002
+	GPT3TextCurie001        = goopenai.GPT3TextCurie001
+	GPT3TextBabbage001      = goopenai.GPT3TextBabbage001
+	GPT3TextAda001          = goopenai.GPT3TextAda001
+	GPT3TextDavinci001      = goopenai.GPT3TextDavinc
