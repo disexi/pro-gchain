@@ -22,4 +22,11 @@ const (
 	GPT3TextCurie001        = goopenai.GPT3TextCurie001
 	GPT3TextBabbage001      = goopenai.GPT3TextBabbage001
 	GPT3TextAda001          = goopenai.GPT3TextAda001
-	GPT3TextDavinci001      = goopenai.GPT3TextDavinc
+	GPT3TextDavinci001      = goopenai.GPT3TextDavinci001
+	GPT3DavinciInstructBeta = goopenai.GPT3DavinciInstructBeta
+	GPT3Davinci             = goopenai.GPT3Davinci
+	GPT3CurieInstructBeta   = goopenai.GPT3CurieInstructBeta
+	GPT3Curie               = goopenai.GPT3Curie
+	GPT3Ada                 = goopenai.GPT3Ada
+	GPT3Babbage             = goopenai.GPT3Babbage
+)
