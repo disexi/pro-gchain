@@ -36,4 +36,18 @@ func NewOpenAIChatModel(authToken string, modelName string, callbackManager *cal
 	}
 
 	if opts.Verbose {
-		llm.callbackMan
+		llm.callbackManager.RegisterCallback(model.CallbackModelEnd, callback.VerboseCallback)
+	}
+
+	return
+}
+
+// Call runs completion on chat model, the prompt will be put as user chat
+func (O *OpenAIChatModel) Call(ctx context.Context, prompt string, options ...func(*model.Option)) (output string, err error) {
+	messages := []model.ChatMessage{
+		{Role: model.ChatMessageRoleUser, Content: prompt},
+	}
+	responds, err := O.Chat(ctx, messages, options...)
+	if err != nil {
+		return
+	
