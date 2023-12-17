@@ -50,4 +50,20 @@ func (O *OpenAIChatModel) Call(ctx context.Context, prompt string, options ...fu
 	responds, err := O.Chat(ctx, messages, options...)
 	if err != nil {
 		return
-	
+	} else {
+		output = responds.Content
+	}
+
+	return
+}
+
+// Chat call chat completion
+func (O *OpenAIChatModel) Chat(ctx context.Context, messages []model.ChatMessage, options ...func(*model.Option)) (output model.ChatMessage, err error) {
+	opts := model.Option{}
+	for _, opt := range options {
+		opt(&opts)
+	}
+
+	// Trigger start callback
+	flattenMessages := model.FlattenChatMessages(messages)
+	O.callbackManager.TriggerEvent(ctx, model.CallbackModel
