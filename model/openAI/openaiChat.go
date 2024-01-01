@@ -79,4 +79,21 @@ func (O *OpenAIChatModel) Chat(ctx context.Context, messages []model.ChatMessage
 		return
 	}
 
-	RequestFunctions := []goopenai.FunctionDefin
+	RequestFunctions := []goopenai.FunctionDefinition{}
+	for _, f := range opts.Functions {
+		RequestFunctions = append(RequestFunctions, goopenai.FunctionDefinition{
+			Name:        f.Name,
+			Description: f.Description,
+			Parameters:  f.Parameters,
+		})
+	}
+	request := goopenai.ChatCompletionRequest{
+		Model:       goopenai.GPT3Dot5Turbo,
+		MaxTokens:   opts.MaxToken,
+		Temperature: opts.Temperature,
+		Messages:    convertMessagesToOai(messages),
+		Functions:   RequestFunctions,
+		Stream:      false,
+	}
+
+	res
