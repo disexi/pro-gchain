@@ -66,4 +66,17 @@ func (O *OpenAIChatModel) Chat(ctx context.Context, messages []model.ChatMessage
 
 	// Trigger start callback
 	flattenMessages := model.FlattenChatMessages(messages)
-	O.callbackManager.TriggerEvent(ctx, model.CallbackModel
+	O.callbackManager.TriggerEvent(ctx, model.CallbackModelStart, callback.CallbackData{
+		EventName:    model.CallbackModelStart,
+		FunctionName: "OpenAIChatModel.Chat",
+		Input:        map[string]string{"input": flattenMessages},
+		Output:       map[string]string{"output": output.String()},
+	})
+
+	// call chatStreaming if it's streaming chat
+	if opts.IsStreaming && opts.StreamingChannel != nil {
+		output, err = O.chatStreaming(ctx, messages, options...)
+		return
+	}
+
+	RequestFunctions := []goopenai.FunctionDefin
