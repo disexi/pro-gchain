@@ -109,4 +109,15 @@ func (O *OpenAIChatModel) Chat(ctx context.Context, messages []model.ChatMessage
 	}
 	output.PromptUsage = promptUsage
 	// Trigger end callback
-	O.callbackManager.Tri
+	O.callbackManager.TriggerEvent(ctx, model.CallbackModelEnd, callback.CallbackData{
+		EventName:    model.CallbackModelEnd,
+		FunctionName: "OpenAIChatModel.Chat",
+		Input:        map[string]string{"input": flattenMessages},
+		Output:       map[string]string{"output": output.String()},
+	})
+
+	return
+}
+
+// chatStreaming call chat completion in streaming mode
+// this is a blocking function that will return after all res
