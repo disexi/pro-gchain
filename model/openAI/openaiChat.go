@@ -120,4 +120,13 @@ func (O *OpenAIChatModel) Chat(ctx context.Context, messages []model.ChatMessage
 }
 
 // chatStreaming call chat completion in streaming mode
-// this is a blocking function that will return after all res
+// this is a blocking function that will return after all response is completely streamed
+// to get the streaming loop streamingCallbackFunc until it's finished
+func (O *OpenAIChatModel) chatStreaming(ctx context.Context, messages []model.ChatMessage, options ...func(*model.Option)) (output model.ChatMessage, err error) {
+	opts := model.Option{}
+	for _, opt := range options {
+		opt(&opts)
+	}
+
+	request := goopenai.ChatCompletionRequest{
+		Model:       go
