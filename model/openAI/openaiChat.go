@@ -164,4 +164,16 @@ func (O *OpenAIChatModel) chatStreaming(ctx context.Context, messages []model.Ch
 		}
 	}
 
-	// Trigger end callb
+	// Trigger end callback
+	O.callbackManager.TriggerEvent(ctx, model.CallbackModelEnd, callback.CallbackData{
+		EventName:    model.CallbackModelEnd,
+		FunctionName: "OpenAIChatModel.Chat",
+		Input:        map[string]string{"input": model.FlattenChatMessages(messages)},
+		Output:       map[string]string{"output": output.String()},
+	})
+
+	return
+}
+
+func convertMessageToOai(chatMessage model.ChatMessage) goopenai.ChatCompletionMessage {
+	return goopenai.ChatCompletion
