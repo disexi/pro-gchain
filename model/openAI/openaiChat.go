@@ -129,4 +129,20 @@ func (O *OpenAIChatModel) chatStreaming(ctx context.Context, messages []model.Ch
 	}
 
 	request := goopenai.ChatCompletionRequest{
-		Model:       go
+		Model:       goopenai.GPT3Dot5Turbo,
+		MaxTokens:   opts.MaxToken,
+		Temperature: opts.Temperature,
+		Messages:    convertMessagesToOai(messages),
+		Stream:      true,
+	}
+
+	// reset the channel
+	stream, err := O.c.CreateChatCompletionStream(ctx, request)
+	if err != nil {
+		return
+	}
+	defer stream.Close()
+	for {
+		response, errStrea := stream.Recv()
+		if errors.Is(errStrea, io.EOF) {
+			opts.StreamingChannel <- model.ChatMessage{Role: "signal
