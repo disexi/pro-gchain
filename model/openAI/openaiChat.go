@@ -176,4 +176,19 @@ func (O *OpenAIChatModel) chatStreaming(ctx context.Context, messages []model.Ch
 }
 
 func convertMessageToOai(chatMessage model.ChatMessage) goopenai.ChatCompletionMessage {
-	return goopenai.ChatCompletion
+	return goopenai.ChatCompletionMessage{
+		Role:    chatMessage.Role,
+		Name:    chatMessage.Name,
+		Content: chatMessage.Content,
+	}
+}
+
+func convertMessagesToOai(chatMessages []model.ChatMessage) []goopenai.ChatCompletionMessage {
+	var completionMessages []goopenai.ChatCompletionMessage
+	for _, message := range chatMessages {
+		completionMessages = append(completionMessages, convertMessageToOai(message))
+	}
+	return completionMessages
+}
+
+func convertOaiMessageToChat(chat
