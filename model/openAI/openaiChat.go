@@ -145,4 +145,23 @@ func (O *OpenAIChatModel) chatStreaming(ctx context.Context, messages []model.Ch
 	for {
 		response, errStrea := stream.Recv()
 		if errors.Is(errStrea, io.EOF) {
-			opts.StreamingChannel <- model.ChatMessage{Role: "signal
+			opts.StreamingChannel <- model.ChatMessage{Role: "signal", Content: "finished"}
+			break
+		}
+
+		if errStrea != nil {
+			log.Printf("Stream error: %v\n", err)
+			return
+		}
+
+		if len(response.Choices) > 0 {
+			content := response.Choices[0].Delta.Content
+			opts.StreamingChannel <- model.ChatMessage{Role: goopenai.ChatMessageRoleAssistant, Content: content}
+
+			// update final output
+			output.Content += content
+			output.Role = goopenai.ChatMessageRoleAssistant
+		}
+	}
+
+	// Trigger end callb
