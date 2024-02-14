@@ -191,4 +191,16 @@ func convertMessagesToOai(chatMessages []model.ChatMessage) []goopenai.ChatCompl
 	return completionMessages
 }
 
-func convertOaiMessageToChat(chat
+func convertOaiMessageToChat(chatMessage goopenai.ChatCompletionMessage) (message model.ChatMessage) {
+	message = model.ChatMessage{
+		Role:    chatMessage.Role,
+		Content: chatMessage.Content,
+	}
+
+	if chatMessage.FunctionCall != nil {
+		message.Name = chatMessage.FunctionCall.Name
+		message.ParameterJson = chatMessage.FunctionCall.Arguments
+	}
+
+	return
+}
