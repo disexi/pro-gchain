@@ -45,3 +45,20 @@ func (m *OpenAIEmbedModel) EmbedQuery(input string) (embedding []float32, err er
 
 // EmbedQuery produce embedding for a list of documents
 func (m *OpenAIEmbedModel) EmbedDocuments(documents []string) (embeddings [][]float32, err error) {
+	resp, err := m.c.CreateEmbeddings(
+		context.Background(),
+		goopenai.EmbeddingRequest{
+			Input: documents,
+			Model: m.model,
+		})
+
+	if err != nil || len(resp.Data) == 0 {
+		return nil, errors.New("CreateEmbeddings failed" + err.Error())
+	}
+
+	for _, data := range resp.Data {
+		embeddings = append(embeddings, data.Embedding)
+	}
+
+	return
+}
