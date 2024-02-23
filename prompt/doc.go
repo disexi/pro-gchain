@@ -9,4 +9,10 @@ Everything is a string and data passed along to the template as map[string]strin
 
 Example :
 
-	template, _ := NewPromptT
+	template, _ := NewPromptTemplate("template_name", "{{.string}} {{.stringfloat}} {{.stringinteger}}")
+	Data := map[string]string{"string": "string", "stringfloat": "0.1", "stringinteger": "1"}
+	outputPrompt, _ := P.FormatPrompt(Data)
+
+outputPrompt will containt "string 0.1 1"
+*/
+package prompt
