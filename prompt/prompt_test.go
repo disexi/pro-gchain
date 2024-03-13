@@ -38,4 +38,16 @@ func TestPrompt_template_FormatPrompt(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			P, err := NewPromptTemplate(tt.templateName, tt.templateString)
 			if err != nil {
-				t.Error
+				t.Errorf("NewPromptTemplate() error = %v", err)
+			}
+			gotOutput_prompt, err := P.FormatPrompt(tt.args.Data)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Prompt_template.FormatPrompt() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if gotOutput_prompt != tt.wantOutput_prompt {
+				t.Errorf("Prompt_template.FormatPrompt() = %v, want %v", gotOutput_prompt, tt.wantOutput_prompt)
+			}
+		})
+	}
+}
