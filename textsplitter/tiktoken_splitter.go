@@ -67,4 +67,6 @@ func (T *TikTokenSplitter) SplitDocument(input document.Document, maxChunkSize i
 	return documents
 }
 
-func (
+func (T *TikTokenSplitter) Len(input string) int {
+	return len(T.tkm.Encode(input, nil, nil))
+}
