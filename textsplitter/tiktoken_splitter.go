@@ -31,4 +31,26 @@ func (T *TikTokenSplitter) SplitText(input string, maxChunkSize int, overlap int
 	}
 	batches := []string{}
 
-	words := strings.Fields(inpu
+	words := strings.Fields(input)
+	var batch []string
+	var lenCounter int
+
+	for _, word := range words {
+		if lenCounter+T.Len(word) > maxChunkSize {
+			batches = append(batches, strings.Join(batch, " "))
+			batch = []string{}
+			lenCounter = 0
+		}
+
+		batch = append(batch, word)
+		lenCounter += T.Len(word)
+	}
+
+	if len(batch) > 0 {
+		batches = append(batches, strings.Join(batch, " "))
+	}
+
+	return batches
+}
+
+// SplitDocument creates chunk where length's doesn't exceed maxChunk
