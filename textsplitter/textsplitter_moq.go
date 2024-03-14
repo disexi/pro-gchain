@@ -40,3 +40,149 @@ type TextSplitterMock struct {
 
 	// SplitDocumentFunc mocks the SplitDocument method.
 	SplitDocumentFunc func(input document.Document, maxChunkSize int, overlap int) []document.Document
+
+	// SplitTextFunc mocks the SplitText method.
+	SplitTextFunc func(input string, maxChunkSize int, overlap int) []string
+
+	// calls tracks calls to the methods.
+	calls struct {
+		// Len holds details about calls to the Len method.
+		Len []struct {
+			// Input is the input argument value.
+			Input string
+		}
+		// SplitDocument holds details about calls to the SplitDocument method.
+		SplitDocument []struct {
+			// Input is the input argument value.
+			Input document.Document
+			// MaxChunkSize is the maxChunkSize argument value.
+			MaxChunkSize int
+			// Overlap is the overlap argument value.
+			Overlap int
+		}
+		// SplitText holds details about calls to the SplitText method.
+		SplitText []struct {
+			// Input is the input argument value.
+			Input string
+			// MaxChunkSize is the maxChunkSize argument value.
+			MaxChunkSize int
+			// Overlap is the overlap argument value.
+			Overlap int
+		}
+	}
+	lockLen           sync.RWMutex
+	lockSplitDocument sync.RWMutex
+	lockSplitText     sync.RWMutex
+}
+
+// Len calls LenFunc.
+func (mock *TextSplitterMock) Len(input string) int {
+	if mock.LenFunc == nil {
+		panic("TextSplitterMock.LenFunc: method is nil but TextSplitter.Len was just called")
+	}
+	callInfo := struct {
+		Input string
+	}{
+		Input: input,
+	}
+	mock.lockLen.Lock()
+	mock.calls.Len = append(mock.calls.Len, callInfo)
+	mock.lockLen.Unlock()
+	return mock.LenFunc(input)
+}
+
+// LenCalls gets all the calls that were made to Len.
+// Check the length with:
+//
+//	len(mockedTextSplitter.LenCalls())
+func (mock *TextSplitterMock) LenCalls() []struct {
+	Input string
+} {
+	var calls []struct {
+		Input string
+	}
+	mock.lockLen.RLock()
+	calls = mock.calls.Len
+	mock.lockLen.RUnlock()
+	return calls
+}
+
+// SplitDocument calls SplitDocumentFunc.
+func (mock *TextSplitterMock) SplitDocument(input document.Document, maxChunkSize int, overlap int) []document.Document {
+	if mock.SplitDocumentFunc == nil {
+		panic("TextSplitterMock.SplitDocumentFunc: method is nil but TextSplitter.SplitDocument was just called")
+	}
+	callInfo := struct {
+		Input        document.Document
+		MaxChunkSize int
+		Overlap      int
+	}{
+		Input:        input,
+		MaxChunkSize: maxChunkSize,
+		Overlap:      overlap,
+	}
+	mock.lockSplitDocument.Lock()
+	mock.calls.SplitDocument = append(mock.calls.SplitDocument, callInfo)
+	mock.lockSplitDocument.Unlock()
+	return mock.SplitDocumentFunc(input, maxChunkSize, overlap)
+}
+
+// SplitDocumentCalls gets all the calls that were made to SplitDocument.
+// Check the length with:
+//
+//	len(mockedTextSplitter.SplitDocumentCalls())
+func (mock *TextSplitterMock) SplitDocumentCalls() []struct {
+	Input        document.Document
+	MaxChunkSize int
+	Overlap      int
+} {
+	var calls []struct {
+		Input        document.Document
+		MaxChunkSize int
+		Overlap      int
+	}
+	mock.lockSplitDocument.RLock()
+	calls = mock.calls.SplitDocument
+	mock.lockSplitDocument.RUnlock()
+	return calls
+}
+
+// SplitText calls SplitTextFunc.
+func (mock *TextSplitterMock) SplitText(input string, maxChunkSize int, overlap int) []string {
+	if mock.SplitTextFunc == nil {
+		panic("TextSplitterMock.SplitTextFunc: method is nil but TextSplitter.SplitText was just called")
+	}
+	callInfo := struct {
+		Input        string
+		MaxChunkSize int
+		Overlap      int
+	}{
+		Input:        input,
+		MaxChunkSize: maxChunkSize,
+		Overlap:      overlap,
+	}
+	mock.lockSplitText.Lock()
+	mock.calls.SplitText = append(mock.calls.SplitText, callInfo)
+	mock.lockSplitText.Unlock()
+	return mock.SplitTextFunc(input, maxChunkSize, overlap)
+}
+
+// SplitTextCalls gets all the calls that were made to SplitText.
+// Check the length with:
+//
+//	len(mockedTextSplitter.SplitTextCalls())
+func (mock *TextSplitterMock) SplitTextCalls() []struct {
+	Input        string
+	MaxChunkSize int
+	Overlap      int
+} {
+	var calls []struct {
+		Input        string
+		MaxChunkSize int
+		Overlap      int
+	}
+	mock.lockSplitText.RLock()
+	calls = mock.calls.SplitText
+	mock.lockSplitText.RUnlock()
+	return calls
+}
