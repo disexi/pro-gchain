@@ -53,4 +53,18 @@ func (T *TikTokenSplitter) SplitText(input string, maxChunkSize int, overlap int
 	return batches
 }
 
-// SplitDocument creates chunk where length's doesn't exceed maxChunk
+// SplitDocument creates chunk where length's doesn't exceed maxChunkSize.
+// the document metadata will be copied to each chunk
+func (T *TikTokenSplitter) SplitDocument(input document.Document, maxChunkSize int, overlap int) []document.Document {
+	chunks := T.SplitText(input.Text, maxChunkSize, overlap)
+	documents := []document.Document{}
+	for _, chunk := range chunks {
+		documents = append(documents, document.Document{
+			Text:     chunk,
+			Metadata: input.Metadata,
+		})
+	}
+	return documents
+}
+
+func (
