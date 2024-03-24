@@ -29,4 +29,16 @@ func (W *WordSplitter) SplitText(input string, maxChunkSize int, overlap int) []
 		lenCounter += len(word) + 1
 	}
 
-	if len(batch)
+	if len(batch) > 0 {
+		batches = append(batches, strings.Join(batch, " "))
+	}
+
+	return batches
+}
+
+// SplitDocument creates chunk where length's doesn't exceed maxChunkSize.
+// the document metadata will be copied to each chunk
+func (W *WordSplitter) SplitDocument(input document.Document, maxChunkSize int, overlap int) []document.Document {
+	chunks := W.SplitText(input.Text, maxChunkSize, overlap)
+	documents := []document.Document{}
+	for _, chunk := range chunks
