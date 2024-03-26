@@ -41,4 +41,15 @@ func (W *WordSplitter) SplitText(input string, maxChunkSize int, overlap int) []
 func (W *WordSplitter) SplitDocument(input document.Document, maxChunkSize int, overlap int) []document.Document {
 	chunks := W.SplitText(input.Text, maxChunkSize, overlap)
 	documents := []document.Document{}
-	for _, chunk := range chunks
+	for _, chunk := range chunks {
+		documents = append(documents, document.Document{
+			Text:     chunk,
+			Metadata: input.Metadata,
+		})
+	}
+	return documents
+}
+
+func (W *WordSplitter) Len(input string) int {
+	return len(input)
+}
