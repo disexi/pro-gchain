@@ -23,4 +23,18 @@ func NewGreetingTool() *GreetingTool {
 				Properties: map[string]model.FunctionJsonSchema{
 					"user_name": {
 						Type:        model.FunctionDataTypeString,
-						Description: "User name"
+						Description: "User name",
+					},
+				},
+				Required: []string{"user_name"},
+			},
+		},
+	}
+}
+
+// Run give greeting to user, this is to demonstrate the simples form of tool
+// Run expect as map with "user_name" key
+func (G *GreetingTool) Run(ctx context.Context, input map[string]string, options ...func(*model.Option)) (output map[string]string, err error) {
+	if input == nil {
+		return nil, errors.New("GreetingTool : Empty Input")
+	
