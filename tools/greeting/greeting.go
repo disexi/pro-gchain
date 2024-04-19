@@ -37,4 +37,13 @@ func NewGreetingTool() *GreetingTool {
 func (G *GreetingTool) Run(ctx context.Context, input map[string]string, options ...func(*model.Option)) (output map[string]string, err error) {
 	if input == nil {
 		return nil, errors.New("GreetingTool : Empty Input")
-	
+	}
+	stringOutput := G.greetings(input["user_name"])
+	output = map[string]string{"output": stringOutput}
+	return
+}
+
+// SimpleRun give greeting to user, this is to demonstrate the simples form of tool
+// SimpleRun expect valid json string with "user_name" field
+func (G *GreetingTool) SimpleRun(ctx context.Context, prompt string, options ...func(*model.Option)) (output string, err error) {
+	var parameter map[string]strin
