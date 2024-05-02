@@ -64,4 +64,9 @@ func (G *GreetingTool) GetFunctionDefinition() model.FunctionDefinition {
 	return G.functionDefinition
 }
 
-// GetDefinitionString 
+// GetDefinitionString tool definition in string format
+func (G *GreetingTool) GetDefinitionString() string {
+	description := tools.GetDefinitionString(G)
+
+	return description
+}
