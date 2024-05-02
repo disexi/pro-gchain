@@ -46,4 +46,22 @@ func (G *GreetingTool) Run(ctx context.Context, input map[string]string, options
 // SimpleRun give greeting to user, this is to demonstrate the simples form of tool
 // SimpleRun expect valid json string with "user_name" field
 func (G *GreetingTool) SimpleRun(ctx context.Context, prompt string, options ...func(*model.Option)) (output string, err error) {
-	var parameter map[string]strin
+	var parameter map[string]string
+	err = json.Unmarshal([]byte(prompt), &parameter)
+	if err != nil {
+		return
+	}
+	output = G.greetings(parameter["user_name"])
+	return
+}
+
+func (G *GreetingTool) greetings(username string) string {
+	return "Hello " + username + " welcome to the paradise of the world"
+}
+
+// GetFunctionDefinition return function definition of the tool
+func (G *GreetingTool) GetFunctionDefinition() model.FunctionDefinition {
+	return G.functionDefinition
+}
+
+// GetDefinitionString 
