@@ -36,4 +36,5 @@ func TestGreetingsTool(t *testing.T) {
 	// get description
 	description := `name = ` + greetingTool.functionDefinition.Name + `
 description = ` + greetingTool.functionDefinition.Description + "\n"
-	assert.Equal(t, descripti
+	assert.Equal(t, description+greetingTool.GetFunctionDefinition().Parameters.String(), greetingTool.GetDefinitionString())
+}
