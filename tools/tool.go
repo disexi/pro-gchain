@@ -15,4 +15,13 @@ type BaseTool interface {
 	// SimpleRun expect valid json string, each tool may expect different data
 	SimpleRun(ctx context.Context, prompt string, options ...func(*model.Option)) (output string, err error)
 	GetFunctionDefinition() model.FunctionDefinition // Get tools definition in the form of function definition
-	GetDefinitionString() string                     // Get tools definition in the form of tex
+	GetDefinitionString() string                     // Get tools definition in the form of text description
+}
+
+const toolDefinitionString = "name = %s\ndescription = %s\n%s"
+
+// GetDefinitionString return tool definition in string format
+func GetDefinitionString(t BaseTool) string {
+	output := fmt.Sprintf(toolDefinitionString, t.GetFunctionDefinition().Name, t.GetFunctionDefinition().Description, t.GetFunctionDefinition().Parameters.String())
+	return output
+}
